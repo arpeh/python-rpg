@@ -1,0 +1,104 @@
+import pygame as pg
+import os
+from controller import Controls 
+
+class Character(pg.sprite.Sprite):
+    name=""
+    animations={} #contains all the animations
+    animation_types=["stand","walk"]
+    orientations = ["front","back","left","right"]    
+    current_animation=["",""]
+    animation_counter=0
+
+    velocity=[0,0]
+    
+    def __init__(self,name):
+        pg.sprite.Sprite.__init__(self)
+        self.name=name
+        
+        self.load_animations()
+        self.current_animation=["stand","front"]
+        self.image = self.animations[self.current_animation[0]][self.current_animation[1]][0]
+        #Get the sprite boundaries
+        self.rect = self.image.get_rect()
+        
+    def load_animations(self):
+        '''Loads the animations stored in character/graphics/ as individual pictures with filename format name_animationtype_direction_framenumber.png'''
+        ANIMATION_LENGTH=4
+        for i in self.animation_types:
+            self.animations[i]={}
+            for j in self.orientations:
+                self.animations[i][j]=[]
+                for k in range(ANIMATION_LENGTH):
+                    self.animations[i][j].append(pg.image.load(os.path.join(os.path.dirname(__file__),"graphics",self.name+"_"+i+"_"+j+"_"+str(k)+".png")).convert_alpha())
+                    
+    def update(self,level):
+        #Change the frames of the animation
+        self.animation_counter += 1
+        if self.animation_counter == 40:
+            self.animation_counter = 0
+        self.image=self.animations[self.current_animation[0]][self.current_animation[1]][(4*self.animation_counter)//40]
+        
+        #Update the position
+        self.rect.x += self.velocity[0]
+        self.rect.y += self.velocity[1]         
+        
+        #check for collisions
+        collision_list = pg.sprite.spritecollide(self, level.obstacles, False)
+        for i in collision_list:
+            # If moving right, align the right side of the character to the left side of the object
+            if self.velocity[0] > 0:
+                self.rect.right = i.rect.left
+            elif self.velocity[0] < 0:
+                #The opposite
+                self.rect.left = i.rect.right
+            # Same for y-direction
+            if self.velocity[1] > 0:
+                self.rect.bottom = i.rect.top
+            elif self.velocity[1] < 0:
+                self.rect.top = i.rect.bottom            
+
+
+    def start_moving(self,dir):
+        #TODO: get rid of the constants
+        if dir == "DOWN":
+            self.velocity=[0,2]
+            self.current_animation=["walk","front"] 
+        elif dir == "UP":
+            self.velocity=[0,-2]
+            self.current_animation=["walk","back"]
+        elif dir == "LEFT":
+            self.velocity=[-2,0]
+            self.current_animation=["walk","left"]
+        elif dir == "RIGHT":
+            self.velocity=[2,0]
+            self.current_animation=["walk","right"]
+            
+    def stop_moving(self,dir):
+        if dir == "DOWN" and self.velocity[1]>0:    
+            self.velocity=[0,0]
+            self.current_animation=["stand","front"]            
+        elif dir == "UP" and self.velocity[1]<0:
+            self.velocity=[0,0]
+            self.current_animation=["stand","back"]   
+        elif dir == "LEFT" and self.velocity[0]<0:
+            self.velocity=[0,0]
+            self.current_animation=["stand","left"] 
+        elif dir == "RIGHT" and self.velocity[0]>0:
+            self.velocity=[0,0]
+            self.current_animation=["stand","right"] 
+
+class Player(Character):
+    inventory = None
+    def __init__(self):
+        Character.__init__(self,"player")
+        self.inventory = pg.sprite.Group()
+        
+    def update(self,level):
+        Character.update(self,level)
+        #pick up items
+        picked_items = pg.sprite.spritecollide(self, level.item_list, True)
+        if len(picked_items):
+            level.sounds.audio['grab'].play()
+            for i in picked_items:
+                self.inventory.add(i)
