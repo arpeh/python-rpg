@@ -15,14 +15,16 @@ For tutorial, see: http://programarcadegames.com/index.php?lang=en
 ###Tiled and PyTMX
 This game uses Tiled as the map editor, that can be found at http://www.mapeditor.org/
 
-To getting started with Tiled, see http://gamedevelopment.tutsplus.com/tutorials/introduction-to-tiled-map-editor--gamedev-2838
+To get started with Tiled, see http://gamedevelopment.tutsplus.com/tutorials/introduction-to-tiled-map-editor--gamedev-2838
 
 The .tmx-format is handled using PyTMX library: https://github.com/bitcraft/PyTMX
 
 ##What's working so far
 *Player can move around the map and pick up items*
 
-*Levels support scrolling, obstacles and items*
+*Levels support scrolling, obstacles and items.* 
+
+*Switching between the levels is possible, travelling between the levels can be done via Tiled*
 
 *Crude inventory menu*
 
@@ -30,8 +32,6 @@ The .tmx-format is handled using PyTMX library: https://github.com/bitcraft/PyTM
 
 ##What's next
 *Interaction between the shell and the game, e.g. solving problems using coding*
-
-*Switching between levels*
 
 *Adding NPCs to the levels*
 
