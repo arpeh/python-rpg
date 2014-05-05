@@ -23,8 +23,11 @@ def main():
     ctrl=Controls()
     #Load audio
     sounds=Audio()
-    #Load test level
-    level=TestLevel2(player,ctrl,sounds)
+    #Load test levels (TODO: wrap levels and menus into a single class)
+    level={}
+    level['TestLevel']=TestLevel(player,ctrl,sounds)
+    level['TestLevel2']=TestLevel2(player,ctrl,sounds)
+    current_level = 'TestLevel'
     #Load test menu
     menu=Inventory(player)    
     
@@ -51,23 +54,28 @@ def main():
                 if event.key == pg.K_i and event.type == pg.KEYDOWN: #TEMPORARY SOLUTION (separate menus and levels smarter)
                     if current_scene == "level":
                         current_scene = "menu"
-                        level.passivate()
+                        level[current_level].passivate()
                     else: 
                         current_scene = "level"
                 if current_scene == "level":
-                    level.handle_key(event)
+                    level[current_level].handle_key(event)
                 else:
                     pass
                 
         #All game logic after this
         if current_scene == "level":
-            level.update()
+            level[current_level].update()
         else:
             menu.update()
+
+        next_level=level[current_level].check_if_change_level()
+        if next_level:
+            level[next_level].change_to_this_level(current_level)
+            current_level=next_level
             
         #Screen updates after this
         if current_scene == "level":
-            level.draw(screen)
+            level[current_level].draw(screen)
         else:
             menu.draw(screen)
         
