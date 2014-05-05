@@ -21,13 +21,18 @@ The .tmx-format is handled using PyTMX library: https://github.com/bitcraft/PyTM
 
 ##What's working so far
 *Player can move around the map and pick up items*
+
 *Levels support scrolling, obstacles and items*
+
 *Crude inventory menu*
+
 *Rough switching between the game and the Python shell*
 
 ##What's next
 *Interaction between the shell and the game, e.g. solving problems using coding*
+
 *Switching between levels*
+
 *Adding NPCs to the levels*
 
 ##Quick instructions
