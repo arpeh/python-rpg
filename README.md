@@ -6,6 +6,7 @@ A (supposedly) steampunk-themed, cross-platform RPG, where the player learns Pyt
 ##Prerequisities
 
 ###Python 2.7
+https://www.python.org/
 
 ###Pygame
 http://www.pygame.org/
