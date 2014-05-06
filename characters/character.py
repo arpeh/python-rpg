@@ -7,7 +7,7 @@ class Character(pg.sprite.Sprite):
     animations={} #contains all the animations
     animation_types=["stand","walk"]
     orientations = ["front","back","left","right"]    
-    current_animation=["",""]
+    current_animation=["",""] #should the facing direction be separated from this?
     animation_counter=0
 
     velocity=[0,0]
@@ -90,9 +90,11 @@ class Character(pg.sprite.Sprite):
 
 class Player(Character):
     inventory = None
+    rect_interact=None #used for the interacting with the environment 
     def __init__(self):
         Character.__init__(self,"player")
         self.inventory = pg.sprite.Group()
+        self.rect_interact=pg.Rect(self.rect.x, self.rect.y, self.rect.width, self.rect.height)
         
     def update(self,level):
         Character.update(self,level)
@@ -102,3 +104,16 @@ class Player(Character):
             level.sounds.audio['grab'].play()
             for i in picked_items:
                 self.inventory.add(i)
+        #update the position of the interaction rectangle according to the player's facing direction
+        if(self.current_animation[1]=='front'):
+            self.rect_interact.center=(self.rect.center[0],self.rect.bottom)
+            self.rect_interact.top=self.rect.bottom
+        elif(self.current_animation[1]=='back'):
+            self.rect_interact.center=(self.rect.center[0],self.rect.top)
+            self.rect_interact.bottom=self.rect.top
+        elif(self.current_animation[1]=='left'):
+            self.rect_interact.center=(self.rect.center[0],self.rect.center[1])
+            self.rect_interact.right=self.rect.left               
+        elif(self.current_animation[1]=='right'):
+            self.rect_interact.center=(self.rect.center[0],self.rect.center[1])
+            self.rect_interact.left=self.rect.right      

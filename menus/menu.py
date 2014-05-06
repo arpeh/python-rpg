@@ -67,3 +67,17 @@ class Inventory(Menu):
             if mouse_position[0] >= i.rect.left and mouse_position[0] <= i.rect.right:
                 if mouse_position[1] >= i.rect.top and mouse_position[1] <= i.rect.bottom:
                     self.texts.add(TextSprite(self.description_font,i.properties['name']+' ('+i.properties['type']+')',[self.rect.left+50,self.rect.bottom-50]))
+
+class TextBox(Menu):
+    '''The text box that opens at the bottom of the screen, when someone speaks or player reads a sign, et cetera.'''
+    def __init__(self):
+        Menu.__init__(self,'textbox.png')
+        self.rect.bottom=550
+        self.text_font=pg.font.Font(None,50)
+        
+    def set_text(self,text):
+        self.texts.empty()
+        self.texts.add(TextSprite(self.text_font,text,[self.rect.left+25,self.rect.top+25]))#TODO: support for multiline text
+    
+    def update(self):
+        Menu.update(self)    

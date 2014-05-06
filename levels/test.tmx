@@ -2742,7 +2742,7 @@
  <objectgroup name="Obstacles" width="30" height="30">
   <object name="trunk" x="301" y="301" width="94" height="21"/>
   <object gid="140" x="141" y="427" width="32" height="32"/>
-  <object gid="143" x="797" y="254"/>
+  <object gid="143" x="797" y="254" width="32" height="32"/>
  </objectgroup>
  <objectgroup name="Items" width="30" height="30">
   <object name="x" type="variable" gid="139" x="138" y="243">
@@ -2758,5 +2758,17 @@
  </objectgroup>
  <objectgroup name="LevelChange" width="30" height="30">
   <object name="TestLevel2" x="893" y="289" width="64" height="64"/>
+ </objectgroup>
+ <objectgroup name="Events" width="30" height="30">
+  <object name="message" type="interact" x="800" y="225" width="25" height="24">
+   <properties>
+    <property name="value" value="Next level, this way!"/>
+   </properties>
+  </object>
+  <object name="message" type="interact" x="145" y="401" width="22" height="23">
+   <properties>
+    <property name="value" value="This tree looks like it can be CUT down!"/>
+   </properties>
+  </object>
  </objectgroup>
 </map>

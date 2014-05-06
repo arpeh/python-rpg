@@ -10,9 +10,9 @@ class Obstacle(pg.sprite.Sprite):
         self.image = tmx_map.getTileImageByGid(obstacle_object.gid)
 
         self.rect_original=self.rect.copy() #Stores the object's original position
-        self.rect_original.y -= tmx_map.tileheight #Corrects the idiotic choice of origin in Tiled (for polygones top left corner as anticipated, but for images the bottom one...vittu mita paskaa)
         self.rect.x -= cam_pos[0]
         if self.image:
+            self.rect_original.y -= tmx_map.tileheight #Corrects the idiotic choice of origin in Tiled (for polygones top left corner as anticipated, but for images the bottom one...vittu mita paskaa)
             self.rect.y -= cam_pos[1]+tmx_map.tileheight 
         else:
             self.rect.y -= cam_pos[1]
@@ -41,8 +41,8 @@ class Item(pg.sprite.Sprite):
             self.properties.pop(i)
 
 class LevelChanger(pg.sprite.Sprite):
-    next_level_name = None
     '''This class includes the objects that change the level upon contact with the player'''
+    next_level_name = None
     def __init__(self,changer,tmx_map,cam_pos):
         pg.sprite.Sprite.__init__(self)
         self.rect = pg.Rect(changer.x,changer.y,changer.width,changer.height)
@@ -53,6 +53,24 @@ class LevelChanger(pg.sprite.Sprite):
         self.rect.y -= cam_pos[1]
 
         self.next_level_name=changer.name
+        
+class Event(pg.sprite.Sprite):
+    '''This class includes the events such as messages in the level'''
+    properties = None
+   
+    def __init__(self,event,tmx_map,cam_pos):
+        pg.sprite.Sprite.__init__(self)
+        self.rect = pg.Rect(event.x,event.y,event.width,event.height)
+        #store the original position
+        self.rect_original=self.rect.copy()
+        
+        self.rect.x -= cam_pos[0]
+        self.rect.y -= cam_pos[1]
+
+        self.properties=event.__dict__
+        #cut off the extra crap
+        for i in ['parent','height','width','gid','visible','y','x','rotation']:
+            self.properties.pop(i)
 
 class Level:
     '''Level superclass, not to be used directly'''
@@ -66,6 +84,7 @@ class Level:
     controller=None
     sounds=None
     has_level_just_changed=None
+    events_interactable=None
     
     def __init__(self,player,map_name,ctrl,sounds):
         self.player = player
@@ -90,9 +109,15 @@ class Level:
             self.item_list.add(Item(i,self.tmx_map,self.camera_position))
 
         #Get the level changers
-            self.level_changers=pg.sprite.Group()
-            for i in self.tmx_map.objectgroups[2]:
-                self.level_changers.add(LevelChanger(i,self.tmx_map,self.camera_position))        
+        self.level_changers=pg.sprite.Group()
+        for i in self.tmx_map.objectgroups[2]:
+            self.level_changers.add(LevelChanger(i,self.tmx_map,self.camera_position))
+        #Get interactable events (TODO: generalize to all events)
+        self.events_interactable=pg.sprite.Group()
+        for i in self.tmx_map.objectgroups[3]:
+            new_event=Event(i,self.tmx_map,self.camera_position)
+            if(new_event.properties['type']=='interact'):
+                self.events_interactable.add(new_event)           
             
     def update(self):
         """ Update everything in this level."""
@@ -132,7 +157,11 @@ class Level:
         sprites=self.level_changers.sprites()         
         for i in sprites:
             i.rect.x = i.rect_original.x-self.camera_position[0]
-            i.rect.y = i.rect_original.y-self.camera_position[1]                    
+            i.rect.y = i.rect_original.y-self.camera_position[1]   
+        sprites=self.events_interactable.sprites()         
+        for i in sprites:
+            i.rect.x = i.rect_original.x-self.camera_position[0]
+            i.rect.y = i.rect_original.y-self.camera_position[1]            
 
         
     def draw(self, screen):
@@ -214,6 +243,15 @@ class Level:
         if self.player.rect.y > 600: #CHANGE TO THE SCREEN.HEIGHT
             self.camera_position[1] = self.player.rect.bottom-600            
             self.player.rect.y -=self.camera_position[1]
+            
+    def player_interact(self,textbox):
+        '''Check the interaction between the player and level'''
+        for i in self.events_interactable:
+            if i.rect.colliderect(self.player.rect_interact) and i.properties['name']=='message': #SUPPORTS NOW ONLY MESSAGE EVENTS
+                textbox.set_text(i.properties['value'])
+                return True
+        return False
+    
 class TestLevel(Level):
     
     def __init__(self,player,ctrl,sounds):

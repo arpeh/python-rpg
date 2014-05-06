@@ -29,8 +29,10 @@ def main():
     level['TestLevel2']=TestLevel2(player,ctrl,sounds)
     current_level = 'TestLevel'
     #Load test menu
-    menu=Inventory(player)    
-    
+    menu={}
+    menu['Inventory']=Inventory(player)
+    menu['TextBox']=TextBox() 
+    current_menu = 'Inventory'
     
     #play bg music
     sounds.music["test"].set_volume(0.5)
@@ -51,12 +53,23 @@ def main():
             if event.type == pg.QUIT:
                 quit = True
             elif event.type == pg.KEYDOWN or event.type == pg.KEYUP:
-                if event.key == pg.K_i and event.type == pg.KEYDOWN: #TEMPORARY SOLUTION (separate menus and levels smarter)
+                if event.key == pg.K_i and event.type == pg.KEYDOWN: #TEMPORARY SOLUTION (separate menus and levels smarter and generalize)
                     if current_scene == "level":
                         current_scene = "menu"
+                        current_menu = "Inventory"
                         level[current_level].passivate()
-                    else: 
+                    elif current_scene == "Inventory":  
                         current_scene = "level"
+                        
+                if event.key == pg.K_SPACE and event.type == pg.KEYDOWN: #TEMPORARY SOLUTION (incorporate to player controller)
+                    if current_scene == "level":
+                        is_msg=level[current_level].player_interact(menu["TextBox"])
+                        if is_msg:
+                            current_scene = "menu"
+                            current_menu = "TextBox"
+                            level[current_level].passivate()
+                    elif current_menu == "TextBox": 
+                        current_scene = "level"                
                 if current_scene == "level":
                     level[current_level].handle_key(event)
                 else:
@@ -66,7 +79,7 @@ def main():
         if current_scene == "level":
             level[current_level].update()
         else:
-            menu.update()
+            menu[current_menu].update()
 
         next_level=level[current_level].check_if_change_level()
         if next_level:
@@ -77,7 +90,7 @@ def main():
         if current_scene == "level":
             level[current_level].draw(screen)
         else:
-            menu.draw(screen)
+            menu[current_menu].draw(screen)
         
         pg.display.flip()
         
