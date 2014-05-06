@@ -20,9 +20,9 @@ To get started with Tiled, see http://gamedevelopment.tutsplus.com/tutorials/int
 The .tmx-format is handled using PyTMX library: https://github.com/bitcraft/PyTMX
 
 ##What's working so far
-*Player can move around the map and pick up items*
+*Player can move around the map, pick up items and interact with surroundings*
 
-*Levels support scrolling, obstacles and items.* 
+*Levels support scrolling, obstacles, items and messages in form of signs.* 
 
 *Switching between the levels is possible, travelling between the levels can be done via Tiled*
 
@@ -48,3 +48,5 @@ To run the game:
   *I - open inventory*
   
   *T - switch to shell (to switch back, type 'exit' in shell)*
+  
+  *SPACE - interact (read signs, speak to NPC, etc.) with environment*
