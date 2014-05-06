@@ -35,6 +35,8 @@ The .tmx-format is handled using PyTMX library: https://github.com/bitcraft/PyTM
 
 *Adding NPCs to the levels*
 
+*Map menu*
+
 ##Quick instructions
 
 To run the game:
