@@ -1,7 +1,7 @@
 python-rpg
 ==========
 
-A (supposedly) steampunk-themed, cross-platform RPG, where the player learns Python and uses it to solve problems and  progress in the game.
+A (supposedly) steampunk-themed, cross-platform RPG, where the player learns Python and uses it to solve problems and  progress in the game. Currently in very early phase.
 
 ##Prerequisities
 
