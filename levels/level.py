@@ -127,7 +127,7 @@ class Level:
         map_width=self.tmx_map.width*self.tmx_map.tilewidth
         map_height=self.tmx_map.height*self.tmx_map.tileheight
       
-        if (self.player.rect.x<200 and self.camera_position[0]+self.player.rect.x-200 >= 0) or (self.player.rect.right > 600 and self.camera_position[0]+self.player.rect.right+200<map_width): #The right side limit has to take from screen size!
+        if (self.player.rect.x<200 and self.camera_position[0]+self.player.rect.x-200 >= 0) or (self.player.rect.right > 600 and self.camera_position[0]+self.player.rect.right+200<map_width): #The right side limit has to be taken from screen size!
             if self.player.rect.x<200:
                 delta_x=self.player.rect.x-200
             else:
@@ -136,7 +136,7 @@ class Level:
             self.player.rect.x -= delta_x
 
           
-        if (self.player.rect.y<200 and self.camera_position[1]+self.player.rect.y-200 >= 0) or (self.player.rect.bottom > 400 and self.camera_position[1]+self.player.rect.bottom+200<map_height): #The right side limit has to take from screen size!
+        if (self.player.rect.y<200 and self.camera_position[1]+self.player.rect.y-200 >= 0) or (self.player.rect.bottom > 400 and self.camera_position[1]+self.player.rect.bottom+200<map_height): #The bottom side limit has to be taken from screen size!
             if self.player.rect.y<200:
                 delta_y=self.player.rect.y-200
             else:
@@ -144,6 +144,15 @@ class Level:
             self.camera_position[1] += delta_y
             self.player.rect.y -= delta_y
 
+        #Prevent the player going over the borders of the level
+        if self.player.rect.x < 0:
+            self.player.rect.x = 0
+        elif self.player.rect.right > 800: #The right side limit has to be taken from screen size!
+                self.player.rect.right = 800             
+        if self.player.rect.y < 0:
+            self.player.rect.y = 0
+        elif self.player.rect.bottom > 600:
+            self.player.rect.bottom = 600            
 
         #update items and obstacles (TODO: A COMMON SPRITE GROUP FOR ALL THE OBJECTS IN THE LEVEL, maybe separate x and y also)
         sprites=self.item_list.sprites()         
