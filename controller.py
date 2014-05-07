@@ -61,3 +61,12 @@ class MenuControls:
     '''Handles the menu navigation'''
     def handle_event(self,event):
         pass
+
+    def check_open_menu(self,key):
+    	'''Checks if the pressed key opens a menu. If so, return the name of the menu to be opened, otherwise 0'''
+    	if key == pg.K_i:
+	    return "Inventory"
+    	elif key == pg.K_m:
+	    return "Map"
+    	else:
+	    return 0

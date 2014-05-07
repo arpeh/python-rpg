@@ -5,6 +5,7 @@ from menus.menu import *
 import os
 from interprator import *
 from audio.audio import *
+from controller import * 
 
 def main():
     #initialize PyGame
@@ -16,11 +17,12 @@ def main():
     
     pg.display.set_caption("Python RPG")
  
-
     #Create the player character
     player=Player()
-    #Create controller object for player 
+    #Create controller objects for player and menus
     ctrl=Controls()
+    menu_ctrl=MenuControls()
+
     #Load audio
     sounds=Audio()
     #Load test levels (TODO: wrap levels and menus into a single class)
@@ -55,14 +57,17 @@ def main():
             if event.type == pg.QUIT:
                 quit = True
             elif event.type == pg.KEYDOWN or event.type == pg.KEYUP:
-                if event.key == pg.K_i and event.type == pg.KEYDOWN: #TEMPORARY SOLUTION (separate menus and levels smarter and generalize)
-                    if current_scene == "level":
-                        current_scene = "menu"
-                        current_menu = "Inventory"
-                        level[current_level].passivate()
-                    elif current_menu == "Inventory":  
-                        current_scene = "level"
-                        
+		#Check whether any of the menu keys is pressed
+		if event.type == pg.KEYDOWN:
+		    menu_name=menu_ctrl.check_open_menu(event.key)
+		    if menu_name:
+		    	if current_scene == "level":
+                    	    current_scene = "menu"
+                    	    current_menu = menu_name
+                    	    level[current_level].passivate()
+                    	elif current_menu == menu_name:  
+                    	    current_scene = "level"
+        
                 if event.key == pg.K_SPACE and event.type == pg.KEYDOWN: #TEMPORARY SOLUTION (incorporate to player controller)
                     if current_scene == "level":
                         is_msg=level[current_level].player_interact(menu["TextBox"])
@@ -71,14 +76,6 @@ def main():
                             current_menu = "TextBox"
                             level[current_level].passivate()
                     elif current_menu == "TextBox": 
-                        current_scene = "level"                
-
-                if event.key == pg.K_m and event.type == pg.KEYDOWN: #TEMPORARY SOLUTION (incorporate to player controller)
-                    if current_scene == "level":
-                        current_scene = "menu"
-                        current_menu = "Map"
-                        level[current_level].passivate()
-                    elif current_menu == "Map": 
                         current_scene = "level"                
 
                 if current_scene == "level":
