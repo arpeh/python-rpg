@@ -58,7 +58,7 @@ def main():
                         current_scene = "menu"
                         current_menu = "Inventory"
                         level[current_level].passivate()
-                    elif current_scene == "Inventory":  
+                    elif current_menu == "Inventory":  
                         current_scene = "level"
                         
                 if event.key == pg.K_SPACE and event.type == pg.KEYDOWN: #TEMPORARY SOLUTION (incorporate to player controller)
