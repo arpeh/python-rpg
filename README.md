@@ -27,7 +27,7 @@ The .tmx-format is handled using PyTMX library: https://github.com/bitcraft/PyTM
 
 *Switching between the levels is possible, travelling between the levels can be done via Tiled*
 
-*Crude inventory menu*
+*Crude inventory and map menus*
 
 *Rough switching between the game and the Python shell*
 
@@ -35,8 +35,6 @@ The .tmx-format is handled using PyTMX library: https://github.com/bitcraft/PyTM
 *Interaction between the shell and the game, e.g. solving problems using coding*
 
 *Adding NPCs to the levels*
-
-*Map menu*
 
 ##Quick instructions
 
@@ -47,7 +45,11 @@ To run the game:
   *WASD - move*
   
   *I - open inventory*
+
+  *M - open map*
+  
+  *SPACE - interact (read signs, speak to NPC, etc.) with environment*
   
   *T - switch to shell (to switch back, type 'exit' in shell)*
   
-  *SPACE - interact (read signs, speak to NPC, etc.) with environment*
+
