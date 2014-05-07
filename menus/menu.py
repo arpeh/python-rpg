@@ -80,4 +80,30 @@ class TextBox(Menu):
         self.texts.add(TextSprite(self.text_font,text,[self.rect.left+25,self.rect.top+25]))#TODO: support for multiline text
     
     def update(self):
-        Menu.update(self)    
+        Menu.update(self) 
+
+class Map(Menu):
+
+    pointer=None
+    pointer_rect=None
+    level_positions=None
+    current_level_name=None
+
+    def __init__(self):
+        Menu.__init__(self,'map.png')
+	self.pointer=pg.image.load(os.path.join(os.path.dirname(__file__),'map_pointer.png')).convert_alpha()
+	self.pointer_rect=self.pointer.get_rect()
+        #set the coordinates of the levels on the map (TODO: load these from a file)
+        self.level_positions={}
+	self.level_positions['TestLevel']=(self.rect.x+230,self.rect.y+375)
+	self.level_positions['TestLevel2']=(self.rect.x+290,self.rect.y+400)
+
+    def update(self,level):
+        Menu.update(self)
+	self.current_level_name=level
+
+    def draw(self,screen):
+	Menu.draw(self,screen)
+	self.pointer_rect.center=self.level_positions[self.current_level_name]
+	screen.blit(self.pointer,[self.pointer_rect.x,self.pointer_rect.y]) 
+

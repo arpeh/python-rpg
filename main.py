@@ -28,10 +28,12 @@ def main():
     level['TestLevel']=TestLevel(player,ctrl,sounds)
     level['TestLevel2']=TestLevel2(player,ctrl,sounds)
     current_level = 'TestLevel'
-    #Load test menu
+    #Load test menus
     menu={}
     menu['Inventory']=Inventory(player)
     menu['TextBox']=TextBox() 
+    menu['Map']=Map() 
+
     current_menu = 'Inventory'
     
     #play bg music
@@ -70,6 +72,15 @@ def main():
                             level[current_level].passivate()
                     elif current_menu == "TextBox": 
                         current_scene = "level"                
+
+                if event.key == pg.K_m and event.type == pg.KEYDOWN: #TEMPORARY SOLUTION (incorporate to player controller)
+                    if current_scene == "level":
+                        current_scene = "menu"
+                        current_menu = "Map"
+                        level[current_level].passivate()
+                    elif current_menu == "Map": 
+                        current_scene = "level"                
+
                 if current_scene == "level":
                     level[current_level].handle_key(event)
                 else:
@@ -79,7 +90,10 @@ def main():
         if current_scene == "level":
             level[current_level].update()
         else:
-            menu[current_menu].update()
+	    if current_menu == "Map":
+                menu[current_menu].update(current_level)
+	    else:
+                menu[current_menu].update()
 
         next_level=level[current_level].check_if_change_level()
         if next_level:
