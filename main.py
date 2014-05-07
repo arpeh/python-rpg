@@ -19,10 +19,11 @@ def main():
  
     #Create the player character
     player=Player()
+    #Create shell class
+    shell=Interprator()
     #Create controller objects for player and menus
-    ctrl=Controls()
+    ctrl=Controls(shell)
     menu_ctrl=MenuControls()
-
     #Load audio
     sounds=Audio()
     #Load test levels (TODO: wrap levels and menus into a single class)
@@ -32,7 +33,7 @@ def main():
     current_level = 'TestLevel'
     #Load test menus
     menu={}
-    menu['Inventory']=Inventory(player)
+    menu['Inventory']=Inventory(player,shell)
     menu['TextBox']=TextBox() 
     menu['Map']=Map() 
 
@@ -65,7 +66,8 @@ def main():
                     	    current_scene = "menu"
                     	    current_menu = menu_name
                     	    level[current_level].passivate()
-                    	elif current_menu == menu_name:  
+                    	elif current_menu == menu_name:
+			    menu[current_menu].on_close()  
                     	    current_scene = "level"
         
                 if event.key == pg.K_SPACE and event.type == pg.KEYDOWN: #TEMPORARY SOLUTION (incorporate to player controller)
@@ -82,7 +84,11 @@ def main():
                     level[current_level].handle_key(event)
                 else:
                     pass
-                
+            elif event.type == pg.MOUSEBUTTONDOWN:
+                if current_scene == "level":
+                    pass
+                else:
+                    menu[current_menu].handle_mouse_click(event)		
         #All game logic after this
         if current_scene == "level":
             level[current_level].update()

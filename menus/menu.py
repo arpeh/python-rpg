@@ -2,6 +2,7 @@ import pygame as pg
 import os
 
 class TextSprite(pg.sprite.Sprite):
+    #TODO: Implement choosing color
     def __init__(self,font,text,pos):
         pg.sprite.Sprite.__init__(self)
         self.image=font.render(text,True,[0,0,0])
@@ -15,6 +16,8 @@ class Menu:
     menu_items=None
     texts=None
     rect=None
+    text_list=None
+
     
     def __init__(self,bg_filename):
         self.bg_image=pg.image.load(os.path.join(os.path.dirname(__file__),bg_filename)).convert_alpha()
@@ -26,22 +29,41 @@ class Menu:
         self.menu_items=pg.sprite.Group()
         
         #Init list of the rendered menu texts
-        self.texts=pg.sprite.Group()
+	self.text_list={}
         
     def draw(self,screen):
         screen.blit(self.bg_image,[self.rect.x,self.rect.y])
-        self.texts.draw(screen)
-        
+
     def update(self):
         pass
-        
+
+    def handle_mouse_click(self,event):
+	pass        
+
+    def on_close(self):
+	pass        
+
+
 class Inventory(Menu):
+    shell = None
     player = None
+    rect_highlight = None
+    rect_droplist = None
+    droplist_text_list=None
+
     
-    def __init__(self,player):
+    def __init__(self,player,shell):
         Menu.__init__(self,'inventory.png')
+	self.shell = shell
         self.player = player
         self.description_font=pg.font.Font(None,25)
+	self.droplist_text_list={}
+
+    def draw_texts(self,screen):
+	for i in self.text_list:
+	    screen.blit(self.text_list[i].image,[self.text_list[i].rect.x,self.text_list[i].rect.y])
+	for i in self.droplist_text_list:
+	    screen.blit(self.droplist_text_list[i].image,[self.droplist_text_list[i].rect.x,self.droplist_text_list[i].rect.y])
         
     def draw(self,screen):
         Menu.draw(self,screen)
@@ -52,21 +74,65 @@ class Inventory(Menu):
         for i in range(len(sprite_list)):
             sprite_list[i].rect.x=self.rect.x+25+34*(i%10)
             sprite_list[i].rect.y=self.rect.y+50+34*(i//10)
-            
+
+	#Draw menu objects
+	if self.rect_highlight:
+	    pg.draw.rect(screen,[200,0,0],self.rect_highlight)            
         self.player.inventory.draw(screen)
-        self.texts.draw(screen)
-        self.texts=pg.sprite.Group()
-        
+	if self.rect_droplist:
+	    pg.draw.rect(screen,[100,100,100],self.rect_droplist)
+	        
+	self.draw_texts(screen)	
+    
     def update(self):
         Menu.update(self)
         
-        #check if the mouse is over an menu item
         mouse_position=pg.mouse.get_pos()
-        sprite_list=self.player.inventory.sprites()
-        for i in sprite_list:
+	
+	#check if the mouse is over an menu item        
+	sprite_list=self.player.inventory.sprites()
+	try:
+            self.text_list.pop("description")
+	except:
+	    pass
+	for i in sprite_list:
             if mouse_position[0] >= i.rect.left and mouse_position[0] <= i.rect.right:
                 if mouse_position[1] >= i.rect.top and mouse_position[1] <= i.rect.bottom:
-                    self.texts.add(TextSprite(self.description_font,i.properties['name']+' ('+i.properties['type']+')',[self.rect.left+50,self.rect.bottom-50]))
+                    desc_str=i.properties['name']+' ('+i.properties['type']+')'
+		    self.text_list["description"]=TextSprite(self.description_font,desc_str,[self.rect.left+50,self.rect.bottom-50])
+
+
+    def handle_mouse_click(self,event):
+        if event.type==pg.MOUSEBUTTONDOWN:
+	    defocus = True
+
+	    #if droplist is open, check if any options are clicked    
+	    for i in self.droplist_text_list:
+		option=self.droplist_text_list[i]
+		if event.pos[0] >= option.rect.left and event.pos[0] <= option.rect.right:
+                    if event.pos[1] >= option.rect.top and event.pos[1] <= option.rect.bottom:
+			if i=="shell": #(Currently supports only examining in shell)
+			    pass#shell.interprator()
+
+	    #check if the mouse is over an menu item
+            sprite_list=self.player.inventory.sprites()	    
+            for i in sprite_list:
+            	if event.pos[0] >= i.rect.left and event.pos[0] <= i.rect.right:
+                    if event.pos[1] >= i.rect.top and event.pos[1] <= i.rect.bottom:
+			self.rect_highlight=i.rect
+			self.rect_droplist=pg.Rect(i.rect.right-5,i.rect.bottom-5,150,100)
+			self.droplist_text_list['shell'] = TextSprite(self.description_font,"Examine in shell",[self.rect_droplist.x+5,self.rect_droplist.y+5])		
+			defocus=False
+
+	    if defocus:	    
+	        self.rect_highlight=None
+	        self.rect_droplist=None
+		self.droplist_text_list={}
+
+    def on_close(self):
+	self.rect_highlight=None
+	self.rect_droplist=None
+	self.droplist_text_list={}
 
 class TextBox(Menu):
     '''The text box that opens at the bottom of the screen, when someone speaks or player reads a sign, et cetera.'''

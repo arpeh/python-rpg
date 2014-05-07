@@ -1,4 +1,3 @@
-from interprator import *
 import pygame as pg
 
 
@@ -6,7 +5,11 @@ import pygame as pg
 class Controls:
     '''Handles the movement of the character'''
     movement_key_order = []
+    shell=None
     #I think this should work without much error handling
+    def __init__(self,shell):
+	self.shell=shell	
+
     def reset(self):
         self.movement_key_order = []
         
@@ -38,7 +41,7 @@ class Controls:
             elif event.key == pg.K_d:                  
                 self.add_key("RIGHT")
             elif event.key == pg.K_t:
-                interprator()
+                self.shell.interprator()
         elif event.type == pg.KEYUP:
             if event.key == pg.K_s:
                 self.remove_key("DOWN")
