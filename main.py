@@ -58,16 +58,16 @@ def main():
             if event.type == pg.QUIT:
                 quit = True
             elif event.type == pg.KEYDOWN or event.type == pg.KEYUP:
-        #Check whether any of the menu keys is pressed
-        if event.type == pg.KEYDOWN:
-            menu_name=menu_ctrl.check_open_menu(event.key)
-            if menu_name:
-                if current_scene == "level":
+                #Check whether any of the menu keys is pressed
+                if event.type == pg.KEYDOWN:
+                    menu_name=menu_ctrl.check_open_menu(event.key)
+                    if menu_name:
+                        if current_scene == "level":
                             current_scene = "menu"
                             current_menu = menu_name
                             level[current_level].passivate()
                         elif current_menu == menu_name:
-                menu[current_menu].on_close()  
+                            menu[current_menu].on_close()  
                             current_scene = "level"
         
                 if event.key == pg.K_SPACE and event.type == pg.KEYDOWN: #TEMPORARY SOLUTION (incorporate to player controller)
@@ -93,9 +93,9 @@ def main():
         if current_scene == "level":
             level[current_level].update()
         else:
-        if current_menu == "Map":
+            if current_menu == "Map":
                 menu[current_menu].update(current_level)
-        else:
+            else:
                 menu[current_menu].update()
 
         next_level=level[current_level].check_if_change_level()
