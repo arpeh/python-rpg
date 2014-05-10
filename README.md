@@ -27,14 +27,15 @@ The .tmx-format is handled using PyTMX library: https://github.com/bitcraft/PyTM
 
 *Switching between the levels is possible, travelling between the levels can be done via Tiled*
 
+*Preliminary support for NPCs*
+
 *Crude inventory and map menus*
 
 *Rough switching between the game and the Python shell*
 
 ##What's next
-*Interaction between the shell and the game, e.g. solving problems using coding*
 
-*Adding NPCs to the levels*
+*Interaction between the shell and the game, e.g. solving problems using coding*
 
 ##Quick instructions
 
