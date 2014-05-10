@@ -37,6 +37,8 @@ The .tmx-format is handled using PyTMX library: https://github.com/bitcraft/PyTM
 
 *Interaction between the shell and the game, e.g. solving problems using coding*
 
+*Detailed discussion of the structure of the program to the wiki*
+
 ##Quick instructions
 
 To run the game:
