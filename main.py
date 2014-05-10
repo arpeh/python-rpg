@@ -6,6 +6,7 @@ import os
 from interprator import *
 from audio.audio import *
 from controller import * 
+import random
 
 def main():
     #initialize PyGame
@@ -16,7 +17,10 @@ def main():
     screen=pg.display.set_mode(size)
     
     pg.display.set_caption("Python RPG")
- 
+
+    #Init the rng
+    random.seed() 
+
     #Create the player character
     player=Player()
     #Create shell class

@@ -2774,7 +2774,8 @@
  <objectgroup name="Characters" width="30" height="30">
   <object name="testnpc" x="576" y="384">
    <properties>
-    <property name="text0" value="Hello there!"/>
+    <property name="text0" value="It's a nice day, isn't it?"/>
+    <property name="text1" value="Hello there!"/>
    </properties>
   </object>
  </objectgroup>

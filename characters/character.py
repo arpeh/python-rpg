@@ -1,6 +1,7 @@
 import pygame as pg
 import os
 from controller import Controls 
+import random
 
 class Character(pg.sprite.Sprite):
     name=None
@@ -10,20 +11,25 @@ class Character(pg.sprite.Sprite):
     current_animation=None #should the facing direction be separated from this?
     animation_counter=None
 
+    rect_original=None    
+
     velocity=None
-    
+    MAX_SPEED=None
+        
     def __init__(self,name):
         pg.sprite.Sprite.__init__(self)
         self.name=name
         self.animations={}        
         self.animation_counter=0
         self.velocity=[0,0]
+        self.MAX_SPEED=2
 
         self.load_animations()
         self.current_animation=["stand","front"]
         self.image = self.animations[self.current_animation[0]][self.current_animation[1]][0]
         #Get the sprite boundaries
         self.rect = self.image.get_rect()
+        self.rect_original=self.rect.copy()    
         
     def load_animations(self):
         '''Loads the animations stored in character/graphics/ as individual pictures with filename format name_animationtype_direction_framenumber.png'''
@@ -45,6 +51,9 @@ class Character(pg.sprite.Sprite):
         #Update the position
         self.rect.x += self.velocity[0]
         self.rect.y += self.velocity[1]         
+
+        self.rect_original.x += self.velocity[0]
+        self.rect_original.y += self.velocity[1]  
         
         #check for collisions
         collision_list = pg.sprite.spritecollide(self, level.obstacles, False)
@@ -52,14 +61,19 @@ class Character(pg.sprite.Sprite):
             # If moving right, align the right side of the character to the left side of the object
             if self.velocity[0] > 0:
                 self.rect.right = i.rect.left
+                self.rect_original.right = i.rect_original.left
             elif self.velocity[0] < 0:
                 #The opposite
                 self.rect.left = i.rect.right
+                self.rect_original.left = i.rect_original.right
             # Same for y-direction
             if self.velocity[1] > 0:
                 self.rect.bottom = i.rect.top
+                self.rect_original.bottom = i.rect_original.top
             elif self.velocity[1] < 0:
                 self.rect.top = i.rect.bottom            
+                self.rect_original.top = i.rect_original.bottom            
+                
 
         collision_list = pg.sprite.spritecollide(self, level.character_list, False)
         for i in collision_list:
@@ -67,30 +81,33 @@ class Character(pg.sprite.Sprite):
                 # If moving right, align the right side of the character to the left side of the object
                 if self.velocity[0] > 0:
                     self.rect.right = i.rect.left
+                    self.rect_original.right = i.rect_original.left
                 elif self.velocity[0] < 0:
                     #The opposite
                     self.rect.left = i.rect.right
+                    self.rect_original.left = i.rect_original.right
                 # Same for y-direction
                 if self.velocity[1] > 0:
                     self.rect.bottom = i.rect.top
+                    self.rect_original.bottom = i.rect_original.top
                 elif self.velocity[1] < 0:
                     self.rect.top = i.rect.bottom            
-
+                    self.rect_original.top = i.rect_original.bottom            
 
 
     def start_moving(self,dir):
         #TODO: get rid of the constants
         if dir == "DOWN":
-            self.velocity=[0,2]
+            self.velocity=[0,self.MAX_SPEED]
             self.current_animation=["walk","front"] 
         elif dir == "UP":
-            self.velocity=[0,-2]
+            self.velocity=[0,-self.MAX_SPEED]
             self.current_animation=["walk","back"]
         elif dir == "LEFT":
-            self.velocity=[-2,0]
+            self.velocity=[-self.MAX_SPEED,0]
             self.current_animation=["walk","left"]
         elif dir == "RIGHT":
-            self.velocity=[2,0]
+            self.velocity=[self.MAX_SPEED,0]
             self.current_animation=["walk","right"]
             
     def stop_moving(self,dir):
@@ -140,6 +157,7 @@ class Player(Character):
 class NPC(Character):
     speech_texts = None
     text_index= None
+    frame_counter = None
 
     def __init__(self,name,texts,pos,cam_pos):
         Character.__init__(self,name)
@@ -158,8 +176,30 @@ class NPC(Character):
 
         self.text_index=len(self.speech_texts)-1 #Set to the last text, so the speak function return the first one at first call.
 
+        self.MAX_SPEED=1
+        self.frame_counter=0
+
     def update(self,level):
-        Character.update(self,level)
+        Character.update(self,level)       
+
+        self.frame_counter += 1
+
+        if self.frame_counter == 5*60 and self.current_animation[0]=='stand':
+            directions=['UP','DOWN','LEFT','RIGHT']
+            self.start_moving(directions[random.randrange(len(directions))])
+            self.frame_counter=0
+        elif self.frame_counter == 60 and self.current_animation[0]=='walk': #TODO: This is rather stupid atm, fix
+            if self.current_animation[1]=='front':
+                self.stop_moving('DOWN')
+            elif self.current_animation[1]=='back':
+                self.stop_moving('UP')
+            elif self.current_animation[1]=='left':
+                self.stop_moving('LEFT')
+            elif self.current_animation[1]=='right':
+                self.stop_moving('RIGHT')
+            self.frame_counter=0        
+
+
 
     def speak(self,direction='front'):
         self.text_index=(self.text_index+1)%len(self.speech_texts)
