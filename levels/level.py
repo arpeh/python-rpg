@@ -85,6 +85,8 @@ class Level:
     sounds=None
     has_level_just_changed=None
     events_interactable=None
+    scroll_rect = None
+    screen_size = None
     
     def __init__(self,player,map_name,ctrl,sounds):
         self.player = player
@@ -93,7 +95,11 @@ class Level:
         self.character_list = pg.sprite.Group()
         self.character_list.add(self.player)
         self.has_level_just_changed=True
-        
+	#TODO: Take these values from actual screen size!
+	self.screen_size = (800,600)
+	self.scroll_rect = pg.Rect(200,200,400,200)
+
+
         #Load the map
         self.tmx_map = pytmx.load_pygame(os.path.join(os.path.dirname(__file__),map_name), pixelalpha=True)
         self.camera_position=[0,0]
@@ -127,32 +133,36 @@ class Level:
         map_width=self.tmx_map.width*self.tmx_map.tilewidth
         map_height=self.tmx_map.height*self.tmx_map.tileheight
       
-        if (self.player.rect.x<200 and self.camera_position[0]+self.player.rect.x-200 >= 0) or (self.player.rect.right > 600 and self.camera_position[0]+self.player.rect.right+200<map_width): #The right side limit has to be taken from screen size!
-            if self.player.rect.x<200:
-                delta_x=self.player.rect.x-200
+        if (self.player.rect.x<self.scroll_rect.left and self.camera_position[0]+self.player.rect.x-self.scroll_rect.left >= 0) or \
+	(self.player.rect.right > self.scroll_rect.right and self.camera_position[0]+self.player.rect.right+ \
+	self.screen_size[0]-self.scroll_rect.right<map_width): 
+            if self.player.rect.x<self.scroll_rect.left:
+                delta_x=self.player.rect.x-self.scroll_rect.left
             else:
-                delta_x=self.player.rect.right-600
+                delta_x=self.player.rect.right-self.scroll_rect.right
             self.camera_position[0] += delta_x
             self.player.rect.x -= delta_x
 
           
-        if (self.player.rect.y<200 and self.camera_position[1]+self.player.rect.y-200 >= 0) or (self.player.rect.bottom > 400 and self.camera_position[1]+self.player.rect.bottom+200<map_height): #The bottom side limit has to be taken from screen size!
-            if self.player.rect.y<200:
-                delta_y=self.player.rect.y-200
+        if (self.player.rect.y<self.scroll_rect.top and self.camera_position[1]+self.player.rect.y-self.scroll_rect.top >= 0) or \
+ 	(self.player.rect.bottom > self.scroll_rect.bottom and self.camera_position[1]+\
+	self.player.rect.bottom+self.screen_size[1]-self.scroll_rect.bottom<map_height): 
+            if self.player.rect.y<self.scroll_rect.top:
+                delta_y=self.player.rect.y-self.scroll_rect.top
             else:
-                delta_y=self.player.rect.bottom-400
+                delta_y=self.player.rect.bottom-self.scroll_rect.bottom
             self.camera_position[1] += delta_y
             self.player.rect.y -= delta_y
 
         #Prevent the player going over the borders of the level
         if self.player.rect.x < 0:
             self.player.rect.x = 0
-        elif self.player.rect.right > 800: #The right side limit has to be taken from screen size!
-                self.player.rect.right = 800             
+        elif self.player.rect.right > self.screen_size[0]: #The right side limit has to be taken from screen size!
+                self.player.rect.right = self.screen_size[0]             
         if self.player.rect.y < 0:
             self.player.rect.y = 0
-        elif self.player.rect.bottom > 600:
-            self.player.rect.bottom = 600            
+        elif self.player.rect.bottom > self.screen_size[1]:
+            self.player.rect.bottom = self.screen_size[1]            
 
         #update items and obstacles (TODO: A COMMON SPRITE GROUP FOR ALL THE OBJECTS IN THE LEVEL, maybe separate x and y also)
         sprites=self.item_list.sprites()         
@@ -246,11 +256,11 @@ class Level:
         
         #adjust camera position    
         self.camera_position=[0,0]
-        if self.player.rect.x > 800: #CHANGE TO THE SCREEN.WIDTH
-            self.camera_position[0] = self.player.rect.right-800
+        if self.player.rect.x > self.screen_size[0]: #CHANGE TO THE SCREEN.WIDTH
+            self.camera_position[0] = self.player.rect.right-self.screen_size[0]
             self.player.rect.x -=self.camera_position[0]
-        if self.player.rect.y > 600: #CHANGE TO THE SCREEN.HEIGHT
-            self.camera_position[1] = self.player.rect.bottom-600            
+        if self.player.rect.y > self.screen_size[1]: #CHANGE TO THE SCREEN.HEIGHT
+            self.camera_position[1] = self.player.rect.bottom-self.screen_size[1]            
             self.player.rect.y -=self.camera_position[1]
             
     def player_interact(self,textbox):
