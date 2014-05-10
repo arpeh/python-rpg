@@ -142,9 +142,17 @@ class TextBox(Menu):
         self.text_font=pg.font.Font(None,50)
         
     def set_text(self,text):
-        self.texts.empty()
-        self.texts.add(TextSprite(self.text_font,text,[self.rect.left+25,self.rect.top+25]))#TODO: support for multiline text
-    
+        self.text_list={}
+        self.text_list['line1']=TextSprite(self.text_font,text,[self.rect.left+25,self.rect.top+25])#TODO: support for multiline text
+
+    def draw_texts(self,screen):
+	for i in self.text_list:
+	    screen.blit(self.text_list[i].image,[self.text_list[i].rect.x,self.text_list[i].rect.y])        
+
+    def draw(self,screen):
+        Menu.draw(self,screen)
+        self.draw_texts(screen)
+
     def update(self):
         Menu.update(self) 
 
