@@ -1,7 +1,7 @@
 class Interprator:
 
     def __init__(self):
-	pass
+        pass
 
     def interprator(self,input=None):
         while True:

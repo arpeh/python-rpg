@@ -107,6 +107,7 @@ def main():
         if current_scene == "level":
             level[current_level].draw(screen)
         else:
+            level[current_level].draw(screen)
             menu[current_menu].draw(screen)
         
         pg.display.flip()

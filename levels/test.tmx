@@ -2771,4 +2771,11 @@
    </properties>
   </object>
  </objectgroup>
+ <objectgroup name="Characters" width="30" height="30">
+  <object name="testnpc" x="576" y="384">
+   <properties>
+    <property name="text0" value="Hello there!"/>
+   </properties>
+  </object>
+ </objectgroup>
 </map>

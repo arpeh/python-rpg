@@ -1,6 +1,7 @@
 import pygame as pg
 import pytmx
 import os
+from characters.character import *
 
 class Obstacle(pg.sprite.Sprite):
     '''This class includes the coordinates (and possibly objects) that are impassable)'''
@@ -118,12 +119,22 @@ class Level:
         self.level_changers=pg.sprite.Group()
         for i in self.tmx_map.objectgroups[2]:
             self.level_changers.add(LevelChanger(i,self.tmx_map,self.camera_position))
+
         #Get interactable events (TODO: generalize to all events)
         self.events_interactable=pg.sprite.Group()
         for i in self.tmx_map.objectgroups[3]:
             new_event=Event(i,self.tmx_map,self.camera_position)
             if(new_event.properties['type']=='interact'):
                 self.events_interactable.add(new_event)           
+
+        #Get the characters
+        for i in self.tmx_map.objectgroups[4]:
+            texts=[]
+            for j in i.__dict__:
+                if j[0:len(j)-1]=="text":
+                    texts.append(i.__dict__[j])
+            self.character_list.add(NPC(i.name,texts,[i.x,i.y],self.camera_position))
+                       
             
     def update(self):
         """ Update everything in this level."""
@@ -181,7 +192,11 @@ class Level:
         for i in sprites:
             i.rect.x = i.rect_original.x-self.camera_position[0]
             i.rect.y = i.rect_original.y-self.camera_position[1]            
-
+        sprites=self.character_list.sprites()    
+        for i in sprites:
+            if not i.name == 'player':      
+                i.rect.x = i.rect_original.x-self.camera_position[0]
+                i.rect.y = i.rect_original.y-self.camera_position[1]
         
     def draw(self, screen):
         """ Draw everything on this level. """
@@ -268,6 +283,19 @@ class Level:
         for i in self.events_interactable:
             if i.rect.colliderect(self.player.rect_interact) and i.properties['name']=='message': #SUPPORTS NOW ONLY MESSAGE EVENTS
                 textbox.set_text(i.properties['value'])
+                return True
+        for i in self.character_list:
+            if (not i.name == 'player') and i.rect.colliderect(self.player.rect_interact): #SUPPORTS NOW ONLY MESSAGE EVENTS
+                #Get the NPC orientation from the player's
+                if self.player.current_animation[1]=='front':
+                    orientation='back'
+                elif self.player.current_animation[1]=='left':
+                    orientation='right'
+                elif self.player.current_animation[1]=='right':
+                    orientation='left'
+                else:
+                    orientation='front'
+                textbox.set_text(i.speak(orientation))
                 return True
         return False
     

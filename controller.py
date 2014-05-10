@@ -8,7 +8,7 @@ class Controls:
     shell=None
     #I think this should work without much error handling
     def __init__(self,shell):
-	self.shell=shell	
+        self.shell=shell    
 
     def reset(self):
         self.movement_key_order = []
@@ -66,10 +66,10 @@ class MenuControls:
         pass
 
     def check_open_menu(self,key):
-    	'''Checks if the pressed key opens a menu. If so, return the name of the menu to be opened, otherwise 0'''
-    	if key == pg.K_i:
-	    return "Inventory"
-    	elif key == pg.K_m:
-	    return "Map"
-    	else:
-	    return 0
+        '''Checks if the pressed key opens a menu. If so, return the name of the menu to be opened, otherwise 0'''
+        if key == pg.K_i:
+            return "Inventory"
+        elif key == pg.K_m:
+            return "Map"
+        else:
+            return 0
