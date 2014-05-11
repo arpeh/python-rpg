@@ -1,0 +1,141 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<map version="1.0" orientation="orthogonal" width="70" height="70" tilewidth="32" tileheight="32">
+ <tileset firstgid="1" name="BetaEcruteakenhanced1" tilewidth="32" tileheight="32">
+  <image source="BetaEcruteakenhanced1.png" width="1280" height="1152"/>
+ </tileset>
+ <layer name="Background" width="70" height="70">
+  <data encoding="base64" compression="zlib">
+   eJzt2ltuwjAQhWE3rBxYCk8Na0q7lVJVKZY7dlLHzpmg/+GIywszn8YmMdzeQrjtmMsQwnXY9zOPkPFhcscFF1xwwQUXXFwGF1xqXLjmtV2YmbyNug5vwQWXGhf2XtuFmcnbqOvwFlxwqXFh783bqOvwFmam7MLM5G3UdXgLLmUX9hjbhZnJ26jr8BbWUtkFm2UbfPI+6lq8ZWkfPg/P/xf1itqg5JLWZ3ncO0VtUHKZbUoe6lqVNhc8fvM9I/F6uuLhYs2cM+t37/3Zi8ec9+En8Xq20vM7MY33PWSNV4/w32c7uOCCCy49XdbYTKcQPh75jB7jqPtonbHCZU76Xvpa3VuLmaldS5bXq8xRqz0mZ6TuT+2Ss1H358HF8lH3h8uxXI5oE5834PLXpOVZg3UNqO5VaTKdnjnid9J/TeI+p4Xk7hXUPa/12DInOQ/Lz+M6ss6RW/6eFXukz/dwie95t5zhtj7HTecjdek9K+PGs1/13BJCCCGEvFq+ALJmUb4=
+  </data>
+ </layer>
+ <layer name="Foreground" width="70" height="70">
+  <data encoding="base64" compression="zlib">
+   eJztXElv00AYteP2DC1I4JY7y43lwnJJw53lxnJhkVo3P4LlxiJBmxPLn2C5tD2xSOzrjeUPsEgg4AfwovqTvn4Zx57xTD1x8qSnRo6bxM9v3sx8M8nseBDMWuQc6AJxFARTKWdStsBtkZv3uzFulzcd6kJ6zKdsO9TFpldc+iZmeiym7ICHB8QvrnwTMz2WU66kdOEZfn9t0QWaTA+uC2WObW34/bVFF0iYP9pp5nY5nWaObW1s+8UVFphHOqk2babNtGVtbPvFFZZEpnSYPi2hjw1tfOx7+oG3J5V3WpZ842Pfk4ekj3falrK4bL5UBfKNSh8bWaPKl1s4fhu8A94NqsmTPPD2xLVZYW2pzJhPlRePcPwx+AR8mnGOi2z51QiC343i5yfCK6QPb0v/NF6PQ5UX33D8O/gD/Jlxjots2YLr2Kp5j1W+obZUpm9S5ctEGAST4CZwc+h3znShyhrqm0zbkipf9kOLA+BB8FBY7bhlA9rBRnACnOzTJmKhDfVNprqoMuMMtDgLngPPh9WPWYpA6kJ9U1m/cF6BFlfBa+D10I8xSx5ipglvT2X8Mic8cA9a3AcfgA9De5/dJZrR2jn2dNqOKH91Qfeee+ATtPgMfgG/DoguiUKXDstf3X5JlRch8q0BRuBYY+250lu+YEHRR/P81dVFJy9U3vIFS4o+ukz+FvUAP8/XPikRHimTv0U9wM8r4rGi44486MwNEuGRKaaNiV/4/df96xo6cwNZm6F1lWVDv/D7r/u3CvTzYsw0oXUVE11May8+5ksXzah3ncnULyZ1XB/7pC6SqHedyWROPaj1uizEUe8ak4kuZdcDfAOfD+iMdWW/5/saQF4/LZ+XYxjVWFf1mrLfc7EGcAFzqovgJfByyflVXj8tn+fzAaLUxaQuOAh4O7bKd+B78AP4MSWfD/Cx7jM89xx8Ab4EX4GvwTcZrzXCCMME6X/ab0Zra7S+NsztiO81a7HHlLu8H1Jlr+76le8gj8i9d/SYdNHt21xgN15/D7gX3Cfeazt8ugPcCe4q6Vm5H5HvvaPHrvYmchQdm5zAZzkJngJPi891BFocBY+Bx0voEguPyL139NjV3kRfEUe982bTeWKd0BR68PWAP41V/q1RjhZFIvSYEZzKYN39xPcizisodZoZEm1oLrSYwSythkEbWYfizNLKxX5fHdhaKzGFSjPSRleXqq/FNeh7BjSHqnNb0gX/LtNIm7WIR7oo4ZMuPmVXcx108el6i2I9dBlUxCNdlBjpooYPuviYQU0PdPERSQ114WNW0+tacKBLVp3X5tp0P1Btt0y9aammfuG1J93vYVHm1k0Xqu1SvYk8Q3XdfuzWfEkTl799UQWotkv1JlXNknwkj7WYJi5/+6IK0D4XqjepapbUzuSxNtNEtT9GFybrt1n/Uzaf5T6XfjVeeazDNDHZfyevyWT91uWar/zOUVaNV/V7F2V84vt+q5hdo/yu8IrQSx5fj0wp2r5s76NoZmhRhQYqFPWV7/4bIR//ASq+UhU=
+  </data>
+ </layer>
+ <layer name="Top" width="70" height="70">
+  <data encoding="base64" compression="zlib">
+   eJzt2bcNAkEQRuHBJJgmMDmmC0yO6QKTYrrEZJhC+Bu4EzoBs+y+T3r53CWj3TUDAAD4fy3VVh3VdZ4lJCM1VhM1dZ4lJCu1Vhu1dZ4FAL5lVzXbq4M6Vr2nAQAgDr2SWV8N1LDkPU04ZvoXc7VQS/4LHJ0qZmd1UdeK9zQA4O9WNrurh3qWvacJR007oq4aqsm+AAA4ytvVKe/xvF0d4x7nPQcA8G9ieiv55LfE9FYS07cASEdqZyveRYHfSPmOLk+Md3R4X9Y5KqazYhFZ5yjOVwAQptTOkAAAFPECj00sfw==
+  </data>
+ </layer>
+ <objectgroup name="Obstacles" width="70" height="70">
+  <object gid="1047" x="1184" y="1216"/>
+  <object x="1665" y="800" width="187" height="222"/>
+  <object x="710" y="702" width="117" height="29"/>
+  <object x="1344" y="0" width="225" height="210"/>
+  <object x="1600" y="448" width="218" height="211"/>
+  <object x="1443" y="210" width="159" height="50"/>
+  <object x="1570" y="97" width="26" height="122"/>
+  <object x="1598" y="128" width="31" height="90"/>
+  <object x="1662" y="194" width="32" height="50"/>
+  <object x="1630" y="160" width="31" height="90"/>
+  <object x="1692" y="223" width="32" height="35"/>
+  <object x="1490" y="268" width="167" height="79"/>
+  <object x="1723" y="257" width="32" height="35"/>
+  <object x="1756" y="290" width="32" height="107"/>
+  <object x="1788" y="386" width="31" height="62"/>
+  <object x="1521" y="322" width="159" height="50"/>
+  <object x="1550" y="351" width="159" height="50"/>
+  <object x="1648" y="651" width="158" height="106"/>
+  <object x="1823" y="577" width="32" height="35"/>
+  <object x="1851" y="610" width="33" height="255"/>
+  <object x="1566" y="390" width="159" height="50"/>
+  <object x="1666" y="1120" width="181" height="125"/>
+  <object x="1540" y="1318" width="282" height="118"/>
+  <object x="1539" y="1218" width="58" height="30"/>
+  <object x="1506" y="1250" width="65" height="150"/>
+  <object x="1572" y="1182" width="99" height="79"/>
+  <object x="2005" y="1408" width="36" height="92"/>
+  <object x="1863" y="1378" width="146" height="82"/>
+  <object x="1786" y="1339" width="191" height="39"/>
+  <object x="1691" y="1381" width="170" height="79"/>
+  <object x="1652" y="1231" width="99" height="79"/>
+  <object x="1922" y="1459" width="87" height="40"/>
+  <object x="1959" y="1501" width="118" height="29"/>
+  <object x="1988" y="1535" width="118" height="121"/>
+  <object x="2021" y="1657" width="85" height="382"/>
+  <object x="1470" y="1857" width="123" height="186"/>
+  <object x="1505" y="1888" width="151" height="249"/>
+  <object x="1651" y="1953" width="191" height="181"/>
+  <object x="1842" y="1952" width="154" height="152"/>
+  <object x="1984" y="1919" width="46" height="148"/>
+  <object x="1289" y="481" width="110" height="7"/>
+  <object x="1448" y="800" width="110" height="7"/>
+  <object x="389" y="1242" width="110" height="7"/>
+  <object x="552" y="1662" width="110" height="7"/>
+  <object x="872" y="1630" width="110" height="7"/>
+  <object x="969" y="2043" width="110" height="7"/>
+  <object x="677" y="957" width="117" height="29"/>
+  <object x="742" y="1439" width="117" height="29"/>
+  <object x="133" y="1472" width="117" height="29"/>
+  <object x="451" y="1856" width="117" height="29"/>
+  <object x="647" y="1855" width="117" height="29"/>
+  <object x="838" y="1757" width="117" height="29"/>
+  <object x="711" y="1188" width="116" height="50"/>
+  <object x="935" y="1185" width="116" height="50"/>
+  <object x="-2" y="-2" width="473" height="571"/>
+  <object x="533" y="67" width="199" height="55"/>
+  <object x="470" y="6" width="199" height="55"/>
+  <object x="469" y="129" width="199" height="55"/>
+  <object x="440" y="192" width="199" height="55"/>
+  <object x="373" y="259" width="199" height="55"/>
+  <object x="314" y="324" width="199" height="55"/>
+  <object x="345" y="389" width="199" height="55"/>
+  <object x="371" y="451" width="199" height="55"/>
+  <object x="-29" y="643" width="126" height="58"/>
+  <object x="-2" y="576" width="126" height="58"/>
+  <object x="160" y="559" width="126" height="58"/>
+  <object x="-3" y="706" width="126" height="58"/>
+  <object x="0" y="768" width="475" height="247"/>
+  <object x="478" y="764" width="33" height="194"/>
+  <object x="325" y="704" width="185" height="59"/>
+  <object x="353" y="644" width="126" height="58"/>
+  <object gid="48" x="1600" y="1568"/>
+  <object gid="48" x="1376" y="1792"/>
+  <object gid="48" x="1664" y="1824"/>
+  <object gid="48" x="1152" y="2176"/>
+  <object gid="48" x="544" y="2080"/>
+  <object gid="48" x="288" y="1856"/>
+  <object gid="48" x="128" y="1664"/>
+  <object gid="48" x="384" y="1536"/>
+  <object gid="48" x="672" y="512"/>
+  <object gid="48" x="800" y="576"/>
+  <object gid="48" x="512" y="736"/>
+  <object gid="48" x="960" y="832"/>
+  <object gid="48" x="960" y="1024"/>
+  <object gid="48" x="832" y="1120"/>
+  <object gid="48" x="576" y="1088"/>
+  <object gid="48" x="1920" y="1696"/>
+  <object gid="351" x="480" y="576"/>
+ </objectgroup>
+ <objectgroup name="Items" width="70" height="70"/>
+ <objectgroup name="LevelChange" width="70" height="70">
+  <object name="TestLevel" x="2163" y="1052" width="77" height="68"/>
+ </objectgroup>
+ <objectgroup name="Events" width="70" height="70">
+  <object name="message" type="interact" x="1185" y="1189" width="27" height="24">
+   <properties>
+    <property name="value" value="Welcome to Test Town!"/>
+   </properties>
+  </object>
+  <object name="message" type="interact" x="481" y="549" width="27" height="24">
+   <properties>
+    <property name="value" value="The tower is closed today."/>
+   </properties>
+  </object>
+ </objectgroup>
+ <objectgroup name="Characters" width="70" height="70">
+  <object name="testnpc" x="984" y="1403">
+   <properties>
+    <property name="text0" value="What is your name?"/>
+    <property name="text1" value="Hello! My name is Aput."/>
+   </properties>
+  </object>
+  <object name="testnpc" x="523" y="1435">
+   <properties>
+    <property name="text0" value="Herp."/>
+    <property name="text1" value="Derp."/>
+   </properties>
+  </object>
+ </objectgroup>
+</map>

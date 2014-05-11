@@ -173,6 +173,7 @@ class Map(Menu):
         self.level_positions={}
         self.level_positions['TestLevel']=(self.rect.x+230,self.rect.y+375)
         self.level_positions['TestLevel2']=(self.rect.x+290,self.rect.y+400)
+        self.level_positions['TestTownLevel']=(self.rect.x+100,self.rect.y+370)
 
     def update(self,level):
         Menu.update(self)

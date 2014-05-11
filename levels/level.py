@@ -7,8 +7,14 @@ class Obstacle(pg.sprite.Sprite):
     '''This class includes the coordinates (and possibly objects) that are impassable)'''
     def __init__(self,obstacle_object,tmx_map,cam_pos):
         pg.sprite.Sprite.__init__(self)
-        self.rect = pg.Rect(obstacle_object.x,obstacle_object.y,obstacle_object.width,obstacle_object.height)
         self.image = tmx_map.getTileImageByGid(obstacle_object.gid)
+        if self.image:
+            #If the object has a sprite, take its size
+            self.rect = self.image.get_rect() 
+            self.rect.x=obstacle_object.x
+            self.rect.y=obstacle_object.y
+        else:
+            self.rect = pg.Rect(obstacle_object.x,obstacle_object.y,obstacle_object.width,obstacle_object.height)
 
         self.rect_original=self.rect.copy() #Stores the object's original position
         self.rect.x -= cam_pos[0]
@@ -249,19 +255,22 @@ class Level:
         '''Called when switching to this level'''
         self.has_level_just_changed=True
 
-        self.player.rect.x=0
-        self.player.rect.y=0
+        self.player.rect_original.x=0
+        self.player.rect_original.y=0
         for i in self.level_changers.sprites():
             if i.next_level_name==old_level_name:
                 self.player.rect_original.x=i.rect_original.x
                 self.player.rect_original.y=i.rect_original.y
                 break
+
+        self.player.rect=self.player.rect_original.copy()
         
         #adjust camera position    
         self.camera_position=[0,0]
-        if self.player.rect_original.x > self.screen_size[0]:
+
+        if self.player.rect_original.right > self.screen_size[0]:
             self.camera_position[0] = self.player.rect_original.right-self.screen_size[0]
-        if self.player.rect_original.y > self.screen_size[1]:
+        if self.player.rect_original.bottom > self.screen_size[1]:
             self.camera_position[1] = self.player.rect_original.bottom-self.screen_size[1]            
             
     def player_interact(self,textbox):
@@ -295,3 +304,8 @@ class TestLevel2(Level):
     
     def __init__(self,player,ctrl,sounds):
         Level.__init__(self,player,"test2.tmx",ctrl,sounds)
+
+class TestTownLevel(Level):
+    
+    def __init__(self,player,ctrl,sounds):
+        Level.__init__(self,player,"testtown.tmx",ctrl,sounds)

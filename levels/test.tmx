@@ -2758,6 +2758,7 @@
  </objectgroup>
  <objectgroup name="LevelChange" width="30" height="30">
   <object name="TestLevel2" x="893" y="289" width="64" height="64"/>
+  <object name="TestTownLevel" x="3" y="254" width="64" height="97"/>
  </objectgroup>
  <objectgroup name="Events" width="30" height="30">
   <object name="message" type="interact" x="800" y="225" width="25" height="24">
