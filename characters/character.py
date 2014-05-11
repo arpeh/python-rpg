@@ -11,6 +11,7 @@ class Character(pg.sprite.Sprite):
     current_animation=None #should the facing direction be separated from this?
     animation_counter=None
 
+    #This contains the coordinates of the character respect to the level (self.rect for screen)
     rect_original=None    
 
     velocity=None
@@ -60,18 +61,14 @@ class Character(pg.sprite.Sprite):
         for i in collision_list:
             # If moving right, align the right side of the character to the left side of the object
             if self.velocity[0] > 0:
-                self.rect.right = i.rect.left
                 self.rect_original.right = i.rect_original.left
             elif self.velocity[0] < 0:
                 #The opposite
-                self.rect.left = i.rect.right
                 self.rect_original.left = i.rect_original.right
             # Same for y-direction
             if self.velocity[1] > 0:
-                self.rect.bottom = i.rect.top
                 self.rect_original.bottom = i.rect_original.top
             elif self.velocity[1] < 0:
-                self.rect.top = i.rect.bottom            
                 self.rect_original.top = i.rect_original.bottom            
                 
 
@@ -80,19 +77,29 @@ class Character(pg.sprite.Sprite):
             if not i.name == self.name: 
                 # If moving right, align the right side of the character to the left side of the object
                 if self.velocity[0] > 0:
-                    self.rect.right = i.rect.left
                     self.rect_original.right = i.rect_original.left
                 elif self.velocity[0] < 0:
                     #The opposite
-                    self.rect.left = i.rect.right
                     self.rect_original.left = i.rect_original.right
                 # Same for y-direction
                 if self.velocity[1] > 0:
-                    self.rect.bottom = i.rect.top
                     self.rect_original.bottom = i.rect_original.top
-                elif self.velocity[1] < 0:
-                    self.rect.top = i.rect.bottom            
+                elif self.velocity[1] < 0:           
                     self.rect_original.top = i.rect_original.bottom            
+
+        #Prevent the character going over the borders of the level
+        if self.rect_original.x < 0:
+            self.rect_original.x = 0
+        elif self.rect_original.right > level.level_size[0]: #The right side limit has to be taken from screen size!
+                self.rect_original.right = level.level_size[0]             
+        if self.rect_original.y < 0:
+            self.rect_original.y = 0
+        elif self.rect_original.bottom > level.level_size[1]:
+            self.rect_original.bottom = level.level_size[1]            
+
+        self.rect=self.rect_original.copy()
+        self.rect.x-=level.camera_position[0]
+        self.rect.y-=level.camera_position[1]
 
 
     def start_moving(self,dir):
