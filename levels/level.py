@@ -234,13 +234,13 @@ class Level:
                 self.player.start_moving(self.controller.current_key())
             if event.type == pg.KEYUP:
                 if(self.controller.current_key()=="NONE"):
-                    self.player.stop_moving(old_key)
+                    self.player.stop_moving()
                     self.sounds.audio["walk"].stop()
                 self.player.start_moving(self.controller.current_key())
                 
     def passivate(self):
         '''To be used when changing to menus'''
-        self.player.stop_moving(self.controller.current_key())
+        self.player.stop_moving()
         self.sounds.audio["walk"].stop()  
         self.controller.reset()
 

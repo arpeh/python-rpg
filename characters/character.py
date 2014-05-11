@@ -110,19 +110,32 @@ class Character(pg.sprite.Sprite):
             self.velocity=[self.MAX_SPEED,0]
             self.current_animation=["walk","right"]
             
-    def stop_moving(self,dir):
-        if dir == "DOWN" and self.velocity[1]>0:    
-            self.velocity=[0,0]
-            self.current_animation=["stand","front"]            
-        elif dir == "UP" and self.velocity[1]<0:
-            self.velocity=[0,0]
-            self.current_animation=["stand","back"]   
-        elif dir == "LEFT" and self.velocity[0]<0:
-            self.velocity=[0,0]
-            self.current_animation=["stand","left"] 
-        elif dir == "RIGHT" and self.velocity[0]>0:
-            self.velocity=[0,0]
-            self.current_animation=["stand","right"] 
+    def stop_moving(self):
+        self.velocity=[0,0]
+        self.current_animation[0]='stand'
+
+    def convert_direction(self,dir):
+        '''Converts a facing direction to walking direction and vice versa.'''
+        if dir == 'DOWN':
+            return 'front'
+        elif dir == 'UP':
+            return 'back'
+        elif dir == 'LEFT':
+            return 'left'
+        elif dir == 'RIGHT':
+            return 'right'
+
+        elif dir == 'front':
+            return 'DOWN'
+        elif dir == 'back':
+            return 'UP'
+        elif dir == 'right':
+            return 'RIGHT'
+        elif dir == 'left':
+            return 'LEFT'
+
+        else:
+            return None
 
 class Player(Character):
     inventory = None
@@ -189,14 +202,7 @@ class NPC(Character):
             self.start_moving(directions[random.randrange(len(directions))])
             self.frame_counter=0
         elif self.frame_counter == 60 and self.current_animation[0]=='walk': #TODO: This is rather stupid atm, fix
-            if self.current_animation[1]=='front':
-                self.stop_moving('DOWN')
-            elif self.current_animation[1]=='back':
-                self.stop_moving('UP')
-            elif self.current_animation[1]=='left':
-                self.stop_moving('LEFT')
-            elif self.current_animation[1]=='right':
-                self.stop_moving('RIGHT')
+            self.stop_moving()
             self.frame_counter=0        
 
 
@@ -206,5 +212,5 @@ class NPC(Character):
         #Change the facing direction 
         self.current_animation[1]=direction
         self.image=self.animations[self.current_animation[0]][self.current_animation[1]][(4*self.animation_counter)//40]
-
+        self.stop_moving()
         return self.speech_texts[self.text_index]
