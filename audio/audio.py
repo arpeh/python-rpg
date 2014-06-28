@@ -7,6 +7,7 @@ class Audio:
     music=None
     
     def __init__(self):
+        '''Loads all the audio into memory'''
         self.audio={}
         self.music={}        
         self.audio["walk"] = pg.mixer.Sound(os.path.join(os.path.dirname(__file__),"footsteps_test.ogg"))
