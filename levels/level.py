@@ -4,22 +4,34 @@ import os
 from characters.character import *
 
 class Obstacle(pg.sprite.Sprite):
-    '''This class includes the coordinates (and possibly objects) that are impassable)'''
+    '''This class includes the coordinates (and possibly objects) that are impassable.'''
     def __init__(self,obstacle_object,tmx_map,cam_pos):
+        '''Init
+        input: obstacle_object - PyTMX TiledObject
+               tmx_map - PyTMX TiledMap
+               cam_pos - 2-element float list
+        output: none
+        '''
         pg.sprite.Sprite.__init__(self)
+
+        #Get the sprite of the obstacle (if none, None is returned)
         self.image = tmx_map.getTileImageByGid(obstacle_object.gid)
+
         if self.image:
             #If the object has a sprite, take its size
             self.rect = self.image.get_rect() 
             self.rect.x=obstacle_object.x
             self.rect.y=obstacle_object.y
         else:
+            #Otherwise, use the dimensions of the defined rectangle
             self.rect = pg.Rect(obstacle_object.x,obstacle_object.y,obstacle_object.width,obstacle_object.height)
 
         self.rect_original=self.rect.copy() #Stores the object's original position
+
+        #set the position on the screen
         self.rect.x -= cam_pos[0]
         if self.image:
-            self.rect_original.y -= tmx_map.tileheight #Corrects the idiotic choice of origin in Tiled (for polygones top left corner as anticipated, but for images the bottom one...vittu mita paskaa)
+            self.rect_original.y -= tmx_map.tileheight #Corrects the idiotic choice of origin in Tiled (for polygons top left corner as anticipated, but for images the bottom one...vittu mita paskaa)
             self.rect.y -= cam_pos[1]+tmx_map.tileheight 
         else:
             self.rect.y -= cam_pos[1]
@@ -28,6 +40,13 @@ class Item(pg.sprite.Sprite):
     properties = None
     '''This class includes the information of the items on the level'''
     def __init__(self,item,tmx_map,cam_pos):
+        '''Init
+        input: item - PyTMX TiledObject
+               tmx_map - PyTMX TiledMap
+               cam_pos - 2-element float list
+        output: none
+        '''
+        #Get the item sprite
         pg.sprite.Sprite.__init__(self)
         self.image = tmx_map.getTileImageByGid(item.gid)
 
@@ -38,10 +57,12 @@ class Item(pg.sprite.Sprite):
         self.rect_original=self.rect.copy()    
         self.rect_original.x=item.x
         self.rect_original.y=item.y-tmx_map.tileheight #item.height corrects the stupid choice of origin in Tiled
-        #Correct the position
+
+        #Set the position on the screen
         self.rect.x = item.x-cam_pos[0]
         self.rect.y = item.y-tmx_map.tileheight-cam_pos[1]  
 
+        #Get the dictionary of the object properties
         self.properties=item.__dict__
         #cut off the extra crap
         for i in ['parent','height','width','gid','visible','y','x','rotation']:
@@ -51,14 +72,23 @@ class LevelChanger(pg.sprite.Sprite):
     '''This class includes the objects that change the level upon contact with the player'''
     next_level_name = None
     def __init__(self,changer,tmx_map,cam_pos):
+        '''Init
+        input: changer - PyTMX TiledObject
+               tmx_map - PyTMX TiledMap
+               cam_pos - 2-element float list
+        output: none
+        '''
         pg.sprite.Sprite.__init__(self)
+        #Get the level changer's dimensions
         self.rect = pg.Rect(changer.x,changer.y,changer.width,changer.height)
         #store the original position
         self.rect_original=self.rect.copy()
         
+        #Set the position on the screen
         self.rect.x -= cam_pos[0]
         self.rect.y -= cam_pos[1]
 
+        #The name of the level the changer changes to
         self.next_level_name=changer.name
         
 class Event(pg.sprite.Sprite):
@@ -66,14 +96,25 @@ class Event(pg.sprite.Sprite):
     properties = None
    
     def __init__(self,event,tmx_map,cam_pos):
+        '''Init
+        input: event - PyTMX TiledObject
+               tmx_map - PyTMX TiledMap
+               cam_pos - 2-element float list
+        output: none
+        '''
         pg.sprite.Sprite.__init__(self)
+
+        #Get the position of the event
         self.rect = pg.Rect(event.x,event.y,event.width,event.height)
+
         #store the original position
         self.rect_original=self.rect.copy()
-        
+ 
+        #Set the position on the screen       
         self.rect.x -= cam_pos[0]
         self.rect.y -= cam_pos[1]
 
+        #Get the dictionary of the object properties
         self.properties=event.__dict__
         #cut off the extra crap
         for i in ['parent','height','width','gid','visible','y','x','rotation']:
@@ -97,6 +138,13 @@ class Level:
     level_size = None
     
     def __init__(self,player,map_name,ctrl,sounds):
+        '''Init
+        input: player - Player object
+               map_name - .tmx-map filename string
+               ctrl - Controller object
+               sounds - Audio object
+        output: none
+        '''
         self.player = player
         self.controller = ctrl
         self.sounds = sounds
@@ -144,7 +192,10 @@ class Level:
                        
             
     def update(self):
-        """ Update everything in this level."""
+        ''' Update everything in this level.
+        input: none
+        output: none
+        '''
         self.character_list.update(self)
         
         #update the position of the camera and items  
@@ -193,7 +244,10 @@ class Level:
                 i.rect.y = i.rect_original.y-self.camera_position[1]
         
     def draw(self, screen):
-        """ Draw everything on this level. """
+        """ Draw everything on this level on the screen.
+        input: screen - PyGame surface object
+        output: none 
+        """
         #Draw background and foreground
         layer = self.tmx_map.getTileLayerByName("Background")#CHANGE THE CODE TO USE LAYER NAMES INSTEAD OF INDICES 
         for i in range(self.camera_position[0]//self.tmx_map.tilewidth,(screen.get_width()+self.camera_position[0])//self.tmx_map.tilewidth+1):
@@ -221,19 +275,26 @@ class Level:
                     screen.blit(image, [i*self.tmx_map.tilewidth-self.camera_position[0],j*self.tmx_map.tileheight-self.camera_position[1]])
                     
     def handle_key(self,event):
-            old_key=self.controller.handle_key_event(event)
-            if event.type == pg.KEYDOWN:
-                if old_key == "NONE" and self.controller.is_movement_key(event.key):
-                    self.sounds.audio["walk"].play(-1)
-                self.player.start_moving(self.controller.current_key())
-            if event.type == pg.KEYUP:
-                if(self.controller.current_key()=="NONE"):
-                    self.player.stop_moving()
-                    self.sounds.audio["walk"].stop()
-                self.player.start_moving(self.controller.current_key())
+        '''Handles the key events.
+        input: key event
+        output: none
+        '''
+        old_key=self.controller.handle_key_event(event)
+        if event.type == pg.KEYDOWN:
+            if old_key == "NONE" and self.controller.is_movement_key(event.key):
+                self.sounds.audio["walk"].play(-1)
+            self.player.start_moving(self.controller.current_key())
+        if event.type == pg.KEYUP:
+            if(self.controller.current_key()=="NONE"):
+                self.player.stop_moving()
+                self.sounds.audio["walk"].stop()
+            self.player.start_moving(self.controller.current_key())
                 
     def passivate(self):
-        '''To be used when changing to menus'''
+        '''To be used when changing to menus
+        input: none
+        output: none
+        '''
         self.player.stop_moving()
         self.sounds.audio["walk"].stop()  
         self.controller.reset()
@@ -252,9 +313,13 @@ class Level:
             return 0
         
     def change_to_this_level(self,old_level_name):
-        '''Called when switching to this level'''
+        '''Called when switching to this level.
+        input: name of level switched from 
+        output: none
+        '''
         self.has_level_just_changed=True
 
+        #Move the player to the level changer corresponding to the old level
         self.player.rect_original.x=0
         self.player.rect_original.y=0
         for i in self.level_changers.sprites():
@@ -265,7 +330,7 @@ class Level:
 
         self.player.rect=self.player.rect_original.copy()
         
-        #adjust camera position    
+        #adjust camera position(doesn't function properly)    
         self.camera_position=[0,0]
 
         if self.player.rect_original.right > self.screen_size[0]:
@@ -274,7 +339,9 @@ class Level:
             self.camera_position[1] = self.player.rect_original.bottom-self.screen_size[1]            
             
     def player_interact(self,textbox):
-        '''Check the interaction between the player and level'''
+        '''Check the interaction between the player and level
+        input: TexBox object
+        output: True if an message is evoked, False otherwise'''
         for i in self.events_interactable:
             if i.rect.colliderect(self.player.rect_interact) and i.properties['name']=='message': #SUPPORTS NOW ONLY MESSAGE EVENTS
                 textbox.set_text(i.properties['value'])
