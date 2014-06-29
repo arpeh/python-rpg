@@ -4,32 +4,55 @@ import pygame as pg
 #TODO: put the key bindings to a modifiable list
 class Controls:
     '''Handles the movement of the character'''
-    movement_key_order = []
+    movement_key_order = [] #Contains the name strings of pressed movement keys in the pressing order
     shell=None
     #I think this should work without much error handling
     def __init__(self,shell):
+        '''Init
+        input: Interprator object
+        output: none
+        '''
         self.shell=shell    
 
     def reset(self):
+        '''Empties the movement key queue.
+        input: none
+        output: none
+        '''
         self.movement_key_order = []
         
     def add_key(self,key):
+        '''Adds the key to the queue
+        input: string of the key
+        output: none
+        '''
         self.movement_key_order.append(key)
         
     def remove_key(self,key):
+        '''Removes the given key from the queue
+        input: string of the key
+        output: none
+        '''
         try:
             self.movement_key_order.remove(key)
         except: #error is thrown if the list is empty
             pass
         
     def current_key(self):
+        '''Returns the movement key on the top of the queue
+        input: none
+        output: string of the key (for empty queue 'NONE')
+        '''
         if len(self.movement_key_order) == 0:
             return "NONE"
         else:
             return self.movement_key_order[len(self.movement_key_order)-1] 
         
     def handle_key_event(self,event):
-        '''Handles the key event, returns the key pressed before the new event'''
+        '''Handles the key event
+        input: key event
+        output: string of the (movement) key on the top of the queue
+        '''
         old_key=self.current_key()
         if event.type == pg.KEYDOWN:
             if event.key == pg.K_s:          
@@ -54,7 +77,9 @@ class Controls:
         return old_key
     
     def is_movement_key(self,key):
-        '''Checks if the key event is a movement key'''
+        '''Checks if the key event is of a movement key.
+        input: pygame keyboard constant
+        output: boolean '''
         if key == pg.K_s or key == pg.K_a or key == pg.K_w or key == pg.K_d:
             return True
         else:
@@ -66,7 +91,10 @@ class MenuControls:
         pass
 
     def check_open_menu(self,key):
-        '''Checks if the pressed key opens a menu. If so, return the name of the menu to be opened, otherwise 0'''
+        '''Checks if the pressed key opens a menu.
+        input: pygame keyboard constant
+        output: the name of the menu to be opened (string) or 0
+        '''
         if key == pg.K_i:
             return "Inventory"
         elif key == pg.K_m:
