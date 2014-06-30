@@ -3,7 +3,7 @@ from characters.character import *
 from levels.level import *
 from menus.menu import *
 import os
-from interprator import *
+from codereader import *
 from audio.audio import *
 from controller import * 
 import random
@@ -23,10 +23,10 @@ def main():
 
     #Create the player character
     player=Player()
-    #Create shell class
-    shell=Interprator()
+    #Create codereader class
+    codereader=CodeReader()
     #Create controller objects for player and menus
-    ctrl=Controls(shell)
+    ctrl=Controls(codereader)
     menu_ctrl=MenuControls()
     #Load audio
     sounds=Audio()
@@ -38,7 +38,7 @@ def main():
     current_level = 'TestLevel'
     #Load test menus
     menu={}
-    menu['Inventory']=Inventory(player,shell)
+    menu['Inventory']=Inventory(player,codereader)
     menu['TextBox']=TextBox() 
     menu['Map']=Map() 
 
@@ -84,6 +84,17 @@ def main():
                             level[current_level].passivate()
                     elif current_menu == "TextBox": 
                         current_scene = "level"                
+
+                if event.key == pg.K_t and event.type == pg.KEYDOWN: #ANOTHER TEMPORARY SOLUTION (incorporate to somewhere)
+                    if current_scene == "level":
+                        is_msg=level[current_level].run_code(codereader,menu["TextBox"])
+                        if is_msg:
+                            current_scene = "menu"
+                            current_menu = "TextBox"
+                            level[current_level].passivate()
+                    elif current_menu == "TextBox": 
+                        current_scene = "level"                
+
 
                 if current_scene == "level":
                     level[current_level].handle_key(event)

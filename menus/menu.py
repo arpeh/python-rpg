@@ -45,16 +45,16 @@ class Menu:
 
 
 class Inventory(Menu):
-    shell = None
+    codereader = None
     player = None
     rect_highlight = None
     rect_droplist = None
     droplist_text_list=None
 
     
-    def __init__(self,player,shell):
+    def __init__(self,player,codereader):
         Menu.__init__(self,'inventory.png')
-        self.shell = shell
+        self.codereader = codereader
         self.player = player
         self.description_font=pg.font.Font(None,25)
         self.droplist_text_list={}
@@ -113,7 +113,7 @@ class Inventory(Menu):
             option=self.droplist_text_list[i]
             if event.pos[0] >= option.rect.left and event.pos[0] <= option.rect.right:
                 if event.pos[1] >= option.rect.top and event.pos[1] <= option.rect.bottom:
-                    if i=="shell": #(Currently supports only examining in shell)
+                    if i=="codereader": #(Currently supports only examining in shell)
                         pass#shell.interprator()
 
         #check if the mouse is over an menu item
@@ -123,7 +123,7 @@ class Inventory(Menu):
                 if event.pos[1] >= i.rect.top and event.pos[1] <= i.rect.bottom:
                     self.rect_highlight=i.rect
                     self.rect_droplist=pg.Rect(i.rect.right-5,i.rect.bottom-5,150,100)
-                    self.droplist_text_list['shell'] = TextSprite(self.description_font,"Examine in shell",[self.rect_droplist.x+5,self.rect_droplist.y+5])     
+                    self.droplist_text_list['codereader'] = TextSprite(self.description_font,"TO BE IMPLEMENTED",[self.rect_droplist.x+5,self.rect_droplist.y+5])     
                     defocus=False
 
         if defocus:     

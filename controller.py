@@ -5,14 +5,14 @@ import pygame as pg
 class Controls:
     '''Handles the movement of the character'''
     movement_key_order = [] #Contains the name strings of pressed movement keys in the pressing order
-    shell=None
+    codereader=None
     #I think this should work without much error handling
-    def __init__(self,shell):
+    def __init__(self,codereader):
         '''Init
-        input: Interprator object
+        input: CodeReader object
         output: none
         '''
-        self.shell=shell    
+        self.codereader=codereader    
 
     def reset(self):
         '''Empties the movement key queue.
@@ -63,8 +63,8 @@ class Controls:
                 self.add_key("LEFT")                 
             elif event.key == pg.K_d:                  
                 self.add_key("RIGHT")
-            elif event.key == pg.K_t:
-                self.shell.interprator()
+           # elif event.key == pg.K_t:
+           #     self.codereader.run_code()
         elif event.type == pg.KEYUP:
             if event.key == pg.K_s:
                 self.remove_key("DOWN")

@@ -340,8 +340,8 @@ class Level:
             
     def player_interact(self,textbox):
         '''Check the interaction between the player and level
-        input: TexBox object
-        output: True if an message is evoked, False otherwise'''
+        input: TextBox object
+        output: True if a message is evoked, False otherwise'''
         for i in self.events_interactable:
             if i.rect.colliderect(self.player.rect_interact) and i.properties['name']=='message': #SUPPORTS NOW ONLY MESSAGE EVENTS
                 textbox.set_text(i.properties['value'])
@@ -360,6 +360,26 @@ class Level:
                 textbox.set_text(i.speak(orientation))
                 return True
         return False
+
+    def run_code(self,codereader,textbox):
+        '''Run CodeReader objects run_code() method
+        input: codereader - CodeReader object
+               textbox - TextBox object
+        output: True if a message is evoked, False otherwise'''
+
+        msg = None
+        for i in self.character_list:
+            if (not i.name == 'player') and i.rect.colliderect(self.player.rect_interact):
+                obj_dict = {}
+                obj_dict[i.name] = i 
+                msg=codereader.run_code(obj_dict)
+                break
+        
+        if msg:
+            textbox.set_text(msg)
+            return True
+        else:
+            return False
     
 class TestLevel(Level):
     
