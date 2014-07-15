@@ -334,9 +334,9 @@ class Level:
         self.camera_position=[0,0]
 
         if self.player.rect_original.right > self.screen_size[0]:
-            self.camera_position[0] = self.player.rect_original.right-self.screen_size[0]
+            self.camera_position[0] = self.level_size[0] - self.screen_size[0] - 2
         if self.player.rect_original.bottom > self.screen_size[1]:
-            self.camera_position[1] = self.player.rect_original.bottom-self.screen_size[1]            
+            self.camera_position[1] = self.player.rect_original.bottom - self.screen_size[1]
             
     def player_interact(self,textbox):
         '''Check the interaction between the player and level
