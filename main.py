@@ -1,3 +1,4 @@
+#!/usr/bin/env python
 import pygame as pg
 from characters.character import *
 from levels.level import *
