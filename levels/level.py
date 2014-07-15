@@ -342,6 +342,10 @@ class Level:
         if self.player.rect_original.left + 200 > self.level_size[0]:
             self.camera_position[0] = self.level_size[0] - self.screen_size[0] - 2         
             
+        #Fix to camera glitch bug near bottom map edge
+        if self.player.rect_original.top + 200 > self.level_size[1]:
+            self.camera_position[1] = self.level_size[1] - self.screen_size[1] - 2
+
     def player_interact(self,textbox):
         '''Check the interaction between the player and level
         input: TextBox object
