@@ -242,6 +242,8 @@ class Level:
             if not i.name == 'player':      
                 i.rect.x = i.rect_original.x-self.camera_position[0]
                 i.rect.y = i.rect_original.y-self.camera_position[1]
+        print self.camera_position[0]
+        print self.camera_position[1]
         
     def draw(self, screen):
         """ Draw everything on this level on the screen.
@@ -342,6 +344,10 @@ class Level:
         if self.player.rect_original.left + 200 > self.level_size[0]:
             self.camera_position[0] = self.level_size[0] - self.screen_size[0] - 2         
             
+        #Fix to camera glitch bug near bottom map edge
+        if self.player.rect_original.top + 200 > self.level_size[1]:
+            self.camera_position[1] = self.level_size[1] - self.screen_size[1] - 2         
+
     def player_interact(self,textbox):
         '''Check the interaction between the player and level
         input: TextBox object
@@ -395,6 +401,12 @@ class TestLevel2(Level):
     
     def __init__(self,player,ctrl,sounds):
         Level.__init__(self,player,"test2.tmx",ctrl,sounds)
+    
+        
+class TestLevel3(Level):
+    
+    def __init__(self,player,ctrl,sounds):
+        Level.__init__(self,player,"test3.tmx",ctrl,sounds)
 
 class TestTownLevel(Level):
     

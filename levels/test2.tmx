@@ -3718,6 +3718,9 @@
  </objectgroup>
  <objectgroup name="LevelChangers" width="40" height="30">
   <object name="TestLevel" x="0" y="287" width="59" height="96"/>
+  <object name="TestLevel3" x="4" y="3">
+   <polygon points="0,0 -1,65 97,-2"/>
+  </object>
  </objectgroup>
  <objectgroup name="Events" width="40" height="30">
   <object name="message" type="interact" x="772" y="440" width="22" height="23">
