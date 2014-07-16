@@ -330,22 +330,22 @@ class Level:
 
         self.player.rect=self.player.rect_original.copy()
         
-        #adjust camera position(doesn't function properly)    
-        self.camera_position=[0,0]
+        #adjust camera position
+        self.camera_position=[self.player.rect_original.center[0]-self.screen_size[0]//2,self.player.rect_original.center[1]-self.screen_size[1]//2]
+	
+	#If centering camera takes the screen outside the level, fix it:
+        if self.camera_position[0]<0:
+            self.camera_position[0]=0
+	elif self.camera_position[0]>self.level_size[0]-self.screen_size[0]-1:
+            self.camera_position[0]=self.level_size[0]-self.screen_size[0]-1
 
-        if self.player.rect_original.right > self.screen_size[0]:
-            self.camera_position[0] = self.player.rect_original.right-self.screen_size[0]
-        if self.player.rect_original.bottom > self.screen_size[1]:
-            self.camera_position[1] = self.player.rect_original.bottom-self.screen_size[1]            
-
-        #Fix to camera glitch bug near right map edge
-        if self.player.rect_original.left + 200 > self.level_size[0]:
-            self.camera_position[0] = self.level_size[0] - self.screen_size[0] - 2         
-            
-        #Fix to camera glitch bug near bottom map edge
-        if self.player.rect_original.top + 200 > self.level_size[1]:
-            self.camera_position[1] = self.level_size[1] - self.screen_size[1] - 2
-
+        if self.camera_position[1]<0:
+	    self.camera_position[1]=0
+	elif self.camera_position[1]>self.level_size[1]-self.screen_size[1]-1:
+	    self.camera_position[1]=self.level_size[1]-self.screen_size[1]-1	    
+	    
+        self.update()
+	
     def player_interact(self,textbox):
         '''Check the interaction between the player and level
         input: TextBox object
