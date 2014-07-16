@@ -330,8 +330,8 @@ class Level:
 
         self.player.rect=self.player.rect_original.copy()
         
-        #adjust camera position
-        self.camera_position=[self.player.rect_original.center[0]-self.screen_size[0]//2,self.player.rect_original.center[1]-self.screen_size[1]//2]
+        #adjust camera position (not sure, but center might cause trouble in the future if the player sprite is of even width/height)
+        self.camera_position=[self.player.rect_original.center[0]-self.screen_size[0]//2,self.player.rect_original.center[1]-self.screen_size[1]//2] 
 	
 	#If centering camera takes the screen outside the level, fix it:
         if self.camera_position[0]<0:
