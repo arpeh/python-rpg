@@ -345,7 +345,7 @@ class Level:
 	    self.camera_position[1]=self.level_size[1]-self.screen_size[1]-1	    
 	    
         self.update()
-	
+
     def player_interact(self,textbox):
         '''Check the interaction between the player and level
         input: TextBox object
@@ -399,6 +399,12 @@ class TestLevel2(Level):
     
     def __init__(self,player,ctrl,sounds):
         Level.__init__(self,player,"test2.tmx",ctrl,sounds)
+
+
+class TestLevel3(Level):
+
+    def __init__(self,player,ctrl,sounds):
+        Level.__init__(self,player,"test3.tmx",ctrl,sounds)
 
 class TestTownLevel(Level):
     

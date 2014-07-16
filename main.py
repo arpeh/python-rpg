@@ -1,3 +1,4 @@
+#!/usr/bin/env python
 import pygame as pg
 from characters.character import *
 from levels.level import *
@@ -34,6 +35,7 @@ def main():
     level={}
     level['TestLevel']=TestLevel(player,ctrl,sounds)
     level['TestLevel2']=TestLevel2(player,ctrl,sounds)
+    level['TestLevel3']=TestLevel3(player,ctrl,sounds)
     level['TestTownLevel']=TestTownLevel(player,ctrl,sounds)
     current_level = 'TestLevel'
     #Load test menus
