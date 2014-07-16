@@ -242,8 +242,6 @@ class Level:
             if not i.name == 'player':      
                 i.rect.x = i.rect_original.x-self.camera_position[0]
                 i.rect.y = i.rect_original.y-self.camera_position[1]
-        print self.camera_position[0]
-        print self.camera_position[1]
         
     def draw(self, screen):
         """ Draw everything on this level on the screen.
@@ -401,10 +399,10 @@ class TestLevel2(Level):
     
     def __init__(self,player,ctrl,sounds):
         Level.__init__(self,player,"test2.tmx",ctrl,sounds)
-    
-        
+
+
 class TestLevel3(Level):
-    
+
     def __init__(self,player,ctrl,sounds):
         Level.__init__(self,player,"test3.tmx",ctrl,sounds)
 
