@@ -32,12 +32,10 @@ def main():
     #Load audio
     sounds=Audio()
     #Load test levels (TODO: wrap levels and menus into a single class)
-    level={}
-    level['TestLevel']=TestLevel(player,ctrl,sounds)
-    level['TestLevel2']=TestLevel2(player,ctrl,sounds)
-    level['TestLevel3']=TestLevel3(player,ctrl,sounds)
-    level['TestTownLevel']=TestTownLevel(player,ctrl,sounds)
-    current_level = 'TestLevel'
+    lv = levelInit(player, ctrl, sounds);
+    level = lv.level
+    current_level = lv.current_level
+
     #Load test menus
     menu={}
     menu['Inventory']=Inventory(player,codereader)

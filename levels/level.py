@@ -389,24 +389,21 @@ class Level:
         else:
             return False
     
-class TestLevel(Level):
-    
-    def __init__(self,player,ctrl,sounds):
-        Level.__init__(self,player,"test.tmx",ctrl,sounds)
-    
-        
-class TestLevel2(Level):
-    
-    def __init__(self,player,ctrl,sounds):
-        Level.__init__(self,player,"test2.tmx",ctrl,sounds)
 
+class levelInit():
 
-class TestLevel3(Level):
+    level = {}
+    current_level = 'TestLevel'
 
-    def __init__(self,player,ctrl,sounds):
-        Level.__init__(self,player,"test3.tmx",ctrl,sounds)
+    def __init__(self, player, ctrl, sounds):
+        '''Init - Initialize levels
+        input: player - Player object
+               ctrl - Controller object
+               sounds - Audio object
+        output: none
+        '''
+        self.level['TestLevel'] = Level(player, "test.tmx", ctrl, sounds)
+        self.level['TestLevel2'] = Level(player, "test2.tmx", ctrl, sounds)
+        self.level['TestLevel3'] = Level(player, "test3.tmx", ctrl, sounds)
+        self.level['TestTownLevel'] = Level(player, "testtown.tmx", ctrl, sounds)
 
-class TestTownLevel(Level):
-    
-    def __init__(self,player,ctrl,sounds):
-        Level.__init__(self,player,"testtown.tmx",ctrl,sounds)
