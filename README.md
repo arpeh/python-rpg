@@ -18,7 +18,8 @@ This game uses Tiled as the map editor, that can be found at http://www.mapedito
 
 To get started with Tiled, see http://gamedevelopment.tutsplus.com/tutorials/introduction-to-tiled-map-editor--gamedev-2838
 
-The .tmx-format is handled using PyTMX library: https://github.com/bitcraft/PyTMX
+The .tmx-format is handled using PyTMX library: https://github.com/bitcraft/PyTMX (The easiest way to use PyTMX, is to download the zip file and copying pytmx folder to python-rpg main folder)
+
 
 ##What's working so far
 *Player can move around the map, pick up items and interact with surroundings*
