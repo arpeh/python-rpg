@@ -402,8 +402,9 @@ class levelInit():
                sounds - Audio object
         output: none
         '''
-        self.level['TestLevel'] = Level(player, "test.tmx", ctrl, sounds)
-        self.level['TestLevel2'] = Level(player, "test2.tmx", ctrl, sounds)
-        self.level['TestLevel3'] = Level(player, "test3.tmx", ctrl, sounds)
-        self.level['TestTownLevel'] = Level(player, "testtown.tmx", ctrl, sounds)
+
+        self.level['TestLevel'] = Level(player, os.path.join(os.path.dirname(__file__),'data',"test.tmx"), ctrl, sounds)
+        self.level['TestLevel2'] = Level(player, os.path.join(os.path.dirname(__file__),'data', "test2.tmx"), ctrl, sounds)
+        self.level['TestLevel3'] = Level(player, os.path.join(os.path.dirname(__file__),'data', "test3.tmx"), ctrl, sounds)
+        self.level['TestTownLevel'] = Level(player, os.path.join(os.path.dirname(__file__),'data', "testtown.tmx"), ctrl, sounds)
 
