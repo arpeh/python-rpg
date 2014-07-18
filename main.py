@@ -40,7 +40,7 @@ def main():
     menu={}
     menu['Inventory']=Inventory(player,codereader)
     menu['TextBox']=TextBox() 
-    menu['Map']=Map() 
+    menu['Map']=Map(lv.map_coordinates) 
 
     current_menu = 'Inventory'
     

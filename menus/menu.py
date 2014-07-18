@@ -159,22 +159,23 @@ class TextBox(Menu):
         Menu.update(self) 
 
 class Map(Menu):
-
+    '''Screen showing the map of the game area'''
     pointer=None
     pointer_rect=None
     level_positions=None
     current_level_name=None
 
-    def __init__(self):
+    def __init__(self,level_positions):
+        '''Init
+        input: dictionary, where level names are the keys and positions on the map are the values (x,y-tuples).
+        '''
         Menu.__init__(self,'map.png')
         self.pointer=pg.image.load(os.path.join(os.path.dirname(__file__),'map_pointer.png')).convert_alpha()
         self.pointer_rect=self.pointer.get_rect()
-        #set the coordinates of the levels on the map (TODO: load these from a file)
+        #set the coordinates of the levels on the map
         self.level_positions={}
-        self.level_positions['TestLevel']=(self.rect.x+230,self.rect.y+375)
-        self.level_positions['TestLevel2']=(self.rect.x+290,self.rect.y+400)
-        self.level_positions['TestLevel3']=(self.rect.x+200,self.rect.y+275)
-        self.level_positions['TestTownLevel']=(self.rect.x+100,self.rect.y+370)
+        for key, rel_pos in level_positions.iteritems():
+            self.level_positions[key]=(self.rect.x+rel_pos[0],self.rect.y+rel_pos[1])
 
     def update(self,level):
         Menu.update(self)

@@ -392,8 +392,9 @@ class Level:
 
 class levelInit():
 
-    level = {}
+    level = None
     current_level = None
+    map_coordinates = None
 
     def __init__(self, player, ctrl, sounds):
         '''Init - Initialize levels
@@ -402,6 +403,8 @@ class levelInit():
                sounds - Audio object
         output: none
         '''
+        self.level = {}
+        self.map_coordinates = {}
 
         #Reads the levels to be loaded from levels.list (TODO: handling of an empty filelist)
         level_list_file=open(os.path.join(os.path.dirname(__file__),'levels.list'))
@@ -412,6 +415,7 @@ class levelInit():
             if not line[0] == '#' and len(line.strip()): #Skip all comment and empty lines
                 split_line = line.split()
                 self.level[split_line[0]] = Level(player, os.path.join(os.path.dirname(__file__),'data',split_line[1]), ctrl, sounds)
+                self.map_coordinates[split_line[0]] = (int(split_line[2]),int(split_line[3]))
 
                 if the_first_level: #the game starts from the first level in the filelist
                     self.current_level = split_line[0]

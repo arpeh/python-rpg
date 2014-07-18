@@ -3,11 +3,10 @@
 #
 #The format of this file is as follows:
 #
-#LevelName tmxFileName
+#LevelName tmxFileName mapXcoordinate mapYcoordinate
 #
 
-TestLevel test.tmx
-TestLevel2 test2.tmx
-TestLevel3 test3.tmx
-TestTownLevel testtown.tmx
- 
+TestLevel test.tmx 230 375
+TestLevel2 test2.tmx 290 400
+TestLevel3 test3.tmx 200 275
+TestTownLevel testtown.tmx 100 370
