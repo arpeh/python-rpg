@@ -393,7 +393,7 @@ class Level:
 class levelInit():
 
     level = {}
-    current_level = 'TestLevel'
+    current_level = None
 
     def __init__(self, player, ctrl, sounds):
         '''Init - Initialize levels
@@ -403,8 +403,18 @@ class levelInit():
         output: none
         '''
 
-        self.level['TestLevel'] = Level(player, os.path.join(os.path.dirname(__file__),'data',"test.tmx"), ctrl, sounds)
-        self.level['TestLevel2'] = Level(player, os.path.join(os.path.dirname(__file__),'data', "test2.tmx"), ctrl, sounds)
-        self.level['TestLevel3'] = Level(player, os.path.join(os.path.dirname(__file__),'data', "test3.tmx"), ctrl, sounds)
-        self.level['TestTownLevel'] = Level(player, os.path.join(os.path.dirname(__file__),'data', "testtown.tmx"), ctrl, sounds)
+        #Reads the levels to be loaded from levels.list (TODO: handling of an empty filelist)
+        level_list_file=open(os.path.join(os.path.dirname(__file__),'levels.list'))
 
+        the_first_level=True
+
+        for line in level_list_file:
+            if not line[0] == '#' and len(line.strip()): #Skip all comment and empty lines
+                split_line = line.split()
+                self.level[split_line[0]] = Level(player, os.path.join(os.path.dirname(__file__),'data',split_line[1]), ctrl, sounds)
+
+                if the_first_level: #the game starts from the first level in the filelist
+                    self.current_level = split_line[0]
+                    the_first_level = False
+
+        level_list_file.close()
