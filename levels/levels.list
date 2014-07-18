@@ -1,0 +1,12 @@
+#Contains the list of the maps to be loaded by the game.
+#All the level files should be put into levels/data/
+#
+#The format of this file is as follows:
+#
+#LevelName tmxFileName mapXcoordinate mapYcoordinate
+#
+
+TestLevel test.tmx 230 375
+TestLevel2 test2.tmx 290 400
+TestLevel3 test3.tmx 200 275
+TestTownLevel testtown.tmx 100 370

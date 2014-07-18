@@ -330,14 +330,22 @@ class Level:
 
         self.player.rect=self.player.rect_original.copy()
         
-        #adjust camera position(doesn't function properly)    
-        self.camera_position=[0,0]
+        #adjust camera position (not sure, but center might cause trouble in the future if the player sprite is of even width/height)
+        self.camera_position=[self.player.rect_original.center[0]-self.screen_size[0]//2,self.player.rect_original.center[1]-self.screen_size[1]//2] 
+	
+	#If centering camera takes the screen outside the level, fix it:
+        if self.camera_position[0]<0:
+            self.camera_position[0]=0
+	elif self.camera_position[0]>self.level_size[0]-self.screen_size[0]-1:
+            self.camera_position[0]=self.level_size[0]-self.screen_size[0]-1
 
-        if self.player.rect_original.right > self.screen_size[0]:
-            self.camera_position[0] = self.player.rect_original.right-self.screen_size[0]
-        if self.player.rect_original.bottom > self.screen_size[1]:
-            self.camera_position[1] = self.player.rect_original.bottom-self.screen_size[1]            
-            
+        if self.camera_position[1]<0:
+	    self.camera_position[1]=0
+	elif self.camera_position[1]>self.level_size[1]-self.screen_size[1]-1:
+	    self.camera_position[1]=self.level_size[1]-self.screen_size[1]-1	    
+	    
+        self.update()
+
     def player_interact(self,textbox):
         '''Check the interaction between the player and level
         input: TextBox object
@@ -381,18 +389,36 @@ class Level:
         else:
             return False
     
-class TestLevel(Level):
-    
-    def __init__(self,player,ctrl,sounds):
-        Level.__init__(self,player,"test.tmx",ctrl,sounds)
-    
-        
-class TestLevel2(Level):
-    
-    def __init__(self,player,ctrl,sounds):
-        Level.__init__(self,player,"test2.tmx",ctrl,sounds)
 
-class TestTownLevel(Level):
-    
-    def __init__(self,player,ctrl,sounds):
-        Level.__init__(self,player,"testtown.tmx",ctrl,sounds)
+class levelInit():
+
+    level = None
+    current_level = None
+    map_coordinates = None
+
+    def __init__(self, player, ctrl, sounds):
+        '''Init - Initialize levels
+        input: player - Player object
+               ctrl - Controller object
+               sounds - Audio object
+        output: none
+        '''
+        self.level = {}
+        self.map_coordinates = {}
+
+        #Reads the levels to be loaded from levels.list (TODO: handling of an empty filelist)
+        level_list_file=open(os.path.join(os.path.dirname(__file__),'levels.list'))
+
+        the_first_level=True
+
+        for line in level_list_file:
+            if not line[0] == '#' and len(line.strip()): #Skip all comment and empty lines
+                split_line = line.split()
+                self.level[split_line[0]] = Level(player, os.path.join(os.path.dirname(__file__),'data',split_line[1]), ctrl, sounds)
+                self.map_coordinates[split_line[0]] = (int(split_line[2]),int(split_line[3]))
+
+                if the_first_level: #the game starts from the first level in the filelist
+                    self.current_level = split_line[0]
+                    the_first_level = False
+
+        level_list_file.close()
