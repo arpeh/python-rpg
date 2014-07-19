@@ -39,14 +39,11 @@ class Controls:
             pass
         
     def current_key(self):
-        '''Returns the movement key on the top of the queue
+        '''Returns the movement key(s) on the top of the queue
         input: none
-        output: string of the key (for empty queue 'NONE')
+        output: string of the key(s)
         '''
-        if len(self.movement_key_order) == 0:
-            return "NONE"
-        else:
-            return self.movement_key_order[len(self.movement_key_order)-1] 
+        return self.movement_key_order
         
     def handle_key_event(self,event):
         '''Handles the key event

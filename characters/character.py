@@ -36,6 +36,8 @@ class Character(pg.sprite.Sprite):
         self.animations={}        
         self.animation_counter=0
         self.velocity=[0,0]
+        self.moveX=0
+        self.moveY=0
         self.MAX_SPEED=2.0
 
         self.load_animations()
@@ -79,33 +81,41 @@ class Character(pg.sprite.Sprite):
         #check for collisions
         collision_list = pg.sprite.spritecollide(self, level.obstacles, False)
         for i in collision_list:
-            # If moving right, align the right side of the character to the left side of the object
+            # Stop moving the player when collision with the object
             if self.velocity[0] > 0:
-                self.rect_original.right = i.rect_original.left
+                self.rect_original.x -= self.velocity[0]
+                self.velocity[0] = 0
             elif self.velocity[0] < 0:
                 #The opposite
-                self.rect_original.left = i.rect_original.right
+                self.rect_original.x -= self.velocity[0]
+                self.velocity[0] = 0
             # Same for y-direction
             if self.velocity[1] > 0:
-                self.rect_original.bottom = i.rect_original.top
+                self.rect_original.y -= self.velocity[1]
+                self.velocity[1] = 0
             elif self.velocity[1] < 0:
-                self.rect_original.top = i.rect_original.bottom            
+                self.rect_original.y -= self.velocity[1]
+                self.velocity[1] = 0
                 
 
         collision_list = pg.sprite.spritecollide(self, level.character_list, False)
         for i in collision_list:
             if not i.name == self.name: 
-                # If moving right, align the right side of the character to the left side of the object
+                # Stop moving the player when collision with the character
                 if self.velocity[0] > 0:
-                    self.rect_original.right = i.rect_original.left
+                    self.rect_original.x -= self.velocity[0]
+                    self.velocity[0] = 0
                 elif self.velocity[0] < 0:
                     #The opposite
-                    self.rect_original.left = i.rect_original.right
+                    self.rect_original.x -= self.velocity[0]
+                    self.velocity[0] = 0
                 # Same for y-direction
                 if self.velocity[1] > 0:
-                    self.rect_original.bottom = i.rect_original.top
-                elif self.velocity[1] < 0:           
-                    self.rect_original.top = i.rect_original.bottom            
+                    self.rect_original.y -= self.velocity[1]
+		    self.velocity[1] = 0
+                elif self.velocity[1] < 0:
+                    self.rect_original.y -= self.velocity[1]
+		    self.velocity[1] = 0
 
         #Prevent the character going over the borders of the level
         if self.rect_original.x < 0:
@@ -122,24 +132,29 @@ class Character(pg.sprite.Sprite):
         self.rect.y-=level.camera_position[1]
 
 
-    def start_moving(self,dir):
+    def start_moving(self, movement_key_order):
         '''Sets the velocity and the movement animation for the character.
         input: string of the direction the character is going
         output: none
         '''
         #TODO: get rid of the constants
-        if dir == "DOWN":
-            self.velocity=[0,self.MAX_SPEED]
-            self.current_animation=["walk","front"] 
-        elif dir == "UP":
-            self.velocity=[0,-self.MAX_SPEED]
-            self.current_animation=["walk","back"]
-        elif dir == "LEFT":
-            self.velocity=[-self.MAX_SPEED,0]
-            self.current_animation=["walk","left"]
-        elif dir == "RIGHT":
-            self.velocity=[self.MAX_SPEED,0]
-            self.current_animation=["walk","right"]
+        self.moveX = 0
+        self.moveY = 0
+        self.current_animation[0]='stand' #default if no movement(s)
+        for dir in movement_key_order:
+            if dir == "DOWN":
+                self.current_animation=["walk","front"]
+                self.moveY = self.MAX_SPEED
+            elif dir == "UP":
+                self.current_animation=["walk","back"]
+                self.moveY = -self.MAX_SPEED
+            if dir == "LEFT":
+                self.current_animation=["walk","left"]
+                self.moveX = -self.MAX_SPEED
+            elif dir == "RIGHT":
+                self.current_animation=["walk","right"]
+                self.moveX = self.MAX_SPEED
+	self.velocity=[self.moveX, self.moveY] #apply direction to move
             
     def stop_moving(self):
         '''Stops the movement of the character.
