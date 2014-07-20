@@ -39,9 +39,9 @@ class Controls:
             pass
         
     def current_key(self):
-        '''Returns the movement key(s) on the top of the queue
+        '''Returns the movement key(s)
         input: none
-        output: string of the key(s)
+        output: list of the keys
         '''
         return self.movement_key_order
         

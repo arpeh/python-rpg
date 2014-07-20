@@ -134,7 +134,7 @@ class Character(pg.sprite.Sprite):
 
     def start_moving(self, movement_key_order):
         '''Sets the velocity and the movement animation for the character.
-        input: string of the direction the character is going
+        input: list of the directions the character is going
         output: none
         '''
         #TODO: get rid of the constants
@@ -272,8 +272,9 @@ class NPC(Character):
 
         #Controls the random movement of the NPC
         if self.frame_counter == 5*60 and self.current_animation[0]=='stand':
+            print "npc liikkuu"
             directions=['UP','DOWN','LEFT','RIGHT']
-            self.start_moving(directions[random.randrange(len(directions))])
+            self.start_moving([ directions[random.randrange(len(directions))] ]) #need to be list
             self.frame_counter=0
         elif self.frame_counter == 60 and self.current_animation[0]=='walk': #TODO: This is rather stupid atm, fix
             self.stop_moving()
