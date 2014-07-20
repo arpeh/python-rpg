@@ -231,6 +231,9 @@ class NPC(Character):
     speech_texts = None
     text_index= None
     frame_counter = None #for NPC movement
+    start_x = None #initial position, to keep NPC in area
+    start_y = None
+    npc_leash = None #NPC leash length (in px)
 
     def __init__(self,name,texts,pos,cam_pos):
         '''Init
@@ -243,6 +246,8 @@ class NPC(Character):
         Character.__init__(self,name)
         self.rect.x=pos[0]
         self.rect.y=pos[1]
+        self.start_x = pos[0]
+        self.start_y = pos[1]
 
         self.rect_original=self.rect.copy()    
     
@@ -260,6 +265,7 @@ class NPC(Character):
 
         self.MAX_SPEED=1
         self.frame_counter = random.randint(0, 200) #randomize NPC movement start time
+        self.npc_leash = 150 #to keep NPC in area
 
     def update(self,level):
         '''The overloaded update method.
@@ -272,9 +278,22 @@ class NPC(Character):
 
         #Controls the random movement of the NPC
         if self.frame_counter == 5*60 and self.current_animation[0]=='stand':
-            print "npc liikkuu"
             directions=['UP','DOWN','LEFT','RIGHT']
-            self.start_moving([ directions[random.randrange(len(directions))] ]) #need to be list
+            # keep NPC in initial area
+            if self.rect_original.x > self.start_x +self.npc_leash:
+                self.start_moving(['LEFT'])
+                print "npc x over"
+            elif self.rect_original.x < self.start_x -self.npc_leash:
+                self.start_moving(['RIGHT'])
+                print "npc x under"
+            elif self.rect_original.y > self.start_y +self.npc_leash:
+                self.start_moving(['UP'])
+                print "npc y over"
+            elif self.rect_original.y < self.start_y -self.npc_leash:
+                self.start_moving(['DOWN'])
+                print "npc y under"
+            else:
+                self.start_moving([ directions[random.randrange(len(directions))] ]) #need to be list
             self.frame_counter=0
         elif self.frame_counter == 60 and self.current_animation[0]=='walk': #TODO: This is rather stupid atm, fix
             self.stop_moving()
