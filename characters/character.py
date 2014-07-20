@@ -23,6 +23,7 @@ class Character(pg.sprite.Sprite):
     #This contains the coordinates of the character respect to the level (self.rect for screen)
     rect_original=None    
 
+    position=None #used for improved character movement (2-element float list)
     velocity=None #float list with 2 entries, the first is the x-velocity and the second is the y-velocity
     MAX_SPEED=None
         
@@ -35,16 +36,20 @@ class Character(pg.sprite.Sprite):
         self.name=name
         self.animations={}        
         self.animation_counter=0
+
+        self.position=[0,0]     
+
         self.velocity=[0,0]
         self.MAX_SPEED=2.0
+
 
         self.load_animations()
         self.current_animation=["stand","front"] #the beginning animation
         self.image = self.animations[self.current_animation[0]][self.current_animation[1]][0]
         #Get the sprite boundaries
         self.rect = self.image.get_rect()
-        self.rect_original=self.rect.copy()    
-        
+        self.rect_original=self.rect.copy()   
+ 
     def load_animations(self):
         '''Loads the animations stored in character/graphics/ as individual pictures with filename format name_animationtype_direction_framenumber.png
         input: none
@@ -70,11 +75,16 @@ class Character(pg.sprite.Sprite):
         self.image=self.animations[self.current_animation[0]][self.current_animation[1]][(4*self.animation_counter)//40]
 
         #Update the position
-        self.rect.x += self.velocity[0]
-        self.rect.y += self.velocity[1]         
+        old_pos=[round(self.position[0]),round(self.position[1])]
+        self.position[0] += self.velocity[0]
+        self.position[1] += self.velocity[1]         
 
-        self.rect_original.x += self.velocity[0]
-        self.rect_original.y += self.velocity[1]  
+        self.rect_original.x = round(self.position[0])
+        self.rect_original.y = round(self.position[1])
+
+        self.rect=self.rect_original.copy()
+        self.rect.x-=level.camera_position[0]
+        self.rect.y-=level.camera_position[1]
         
         #check for collisions
         collision_list = pg.sprite.spritecollide(self, level.obstacles, False)
@@ -82,20 +92,24 @@ class Character(pg.sprite.Sprite):
             collision_position=self.rect_original.copy()
 
             #test if moving the character back in the x-direction solves the collision. If so, stop the movement in the x-direction
-            self.rect_original.x -= self.velocity[0]
+            self.rect_original.x = old_pos[0]
             if not pg.Rect.colliderect(self.rect_original,i.rect_original):
+                self.position[0] = old_pos[0]
                 self.velocity[0]=0
             else:
                 #test the same in the y-direction
                 self.rect_original=collision_position.copy()
-                self.rect_original.y -= self.velocity[1]
+                self.rect_original.y=old_pos[1]                
                 if not pg.Rect.colliderect(self.rect_original,i.rect_original):
+                    self.position[1] = old_pos[1]
                     self.velocity[1]=0
                 else:
                     #Otherwise move both
                     self.rect_original=collision_position.copy()
-                    self.rect_original.x -= self.velocity[0]
-                    self.rect_original.y -= self.velocity[1]
+                    self.position[0] = old_pos[0]
+                    self.position[1] = old_pos[1]
+                    self.rect_original.x = old_pos[0]
+                    self.rect_original.y = old_pos[1]
                     self.velocity=[0,0]
 
         collision_list = pg.sprite.spritecollide(self, level.character_list, False)
@@ -103,34 +117,44 @@ class Character(pg.sprite.Sprite):
             if not i.name == self.name: 
                 collision_position=self.rect_original.copy()
 
-                self.rect_original.x -= self.velocity[0]
+                #test if moving the character back in the x-direction solves the collision. If so, stop the movement in the x-direction
+                self.rect_original.x = old_pos[0]
+
                 if not pg.Rect.colliderect(self.rect_original,i.rect_original):
+                    self.position[0] = old_pos[0]
                     self.velocity[0]=0
                 else:
+                    #test the same in the y-direction
                     self.rect_original=collision_position.copy()
-                    self.rect_original.y -= self.velocity[1]
+                    self.rect_original.y=old_pos[1]
                     if not pg.Rect.colliderect(self.rect_original,i.rect_original):
+                        self.position[1] = old_pos[1]
                         self.velocity[1]=0
                     else:
+                        #Otherwise move both
                         self.rect_original=collision_position.copy()
-                        self.rect_original.x -= self.velocity[0]
-                        self.rect_original.y -= self.velocity[1]
+                        self.position[0] = old_pos[0]
+                        self.position[1] = old_pos[1]
+                        self.rect_original.x = old_pos[0]
+                        self.rect_original.y = old_pos[1]
                         self.velocity=[0,0]
-
         #Prevent the character going over the borders of the level
         if self.rect_original.x < 0:
             self.rect_original.x = 0
+            self.position[0] = self.rect_original.x
         elif self.rect_original.right > level.level_size[0]: #The right side limit has to be taken from screen size!
             self.rect_original.right = level.level_size[0]             
+            self.position[0] = self.rect_original.x
         if self.rect_original.y < 0:
             self.rect_original.y = 0
+            self.position[1] = self.rect_original.y
         elif self.rect_original.bottom > level.level_size[1]:
             self.rect_original.bottom = level.level_size[1]            
-
+            self.position[1] = self.rect_original.y
+        
         self.rect=self.rect_original.copy()
         self.rect.x-=level.camera_position[0]
         self.rect.y-=level.camera_position[1]
-
 
     def start_moving(self, movement_key_order):
         '''Sets the velocity and the movement animation for the character.
@@ -160,10 +184,10 @@ class Character(pg.sprite.Sprite):
             #Doesn't function properly, because positions of sprites can't be altered by a fraction of a pixel.
             #Maybe fixed in the future
 
-            #speed=0.7071*self.MAX_SPEED
-            #self.velocity=[movement_direction[0]*speed,movement_direction[1]*speed]
+            speed=0.7071*self.MAX_SPEED
+            self.velocity=[movement_direction[0]*speed,movement_direction[1]*speed]
 
-            self.velocity=[movement_direction[0]*self.MAX_SPEED,movement_direction[1]*self.MAX_SPEED]            
+            #self.velocity=[movement_direction[0]*self.MAX_SPEED,movement_direction[1]*self.MAX_SPEED]            
         else:
             self.velocity=[movement_direction[0]*self.MAX_SPEED,movement_direction[1]*self.MAX_SPEED]
 
@@ -211,6 +235,7 @@ class Player(Character):
         Character.__init__(self,"player")
         self.inventory = pg.sprite.Group()
         self.rect_interact=pg.Rect(self.rect.x, self.rect.y, self.rect.width, self.rect.height)
+        self.position=[0,0]
         
     def update(self,level):
         '''The overloaded update method.
@@ -262,7 +287,8 @@ class NPC(Character):
         self.start_x = pos[0]
         self.start_y = pos[1]
 
-        self.rect_original=self.rect.copy()    
+        self.rect_original=self.rect.copy()
+        self.position=[float(self.rect_original.x),float(self.rect_original.y)]    
     
         self.rect.x-=cam_pos[0]
         self.rect.y-=cam_pos[1]

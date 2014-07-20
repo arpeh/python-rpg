@@ -322,10 +322,12 @@ class Level:
         #Move the player to the level changer corresponding to the old level
         self.player.rect_original.x=0
         self.player.rect_original.y=0
+        self.player.position=[0,0]
         for i in self.level_changers.sprites():
             if i.next_level_name==old_level_name:
                 self.player.rect_original.x=i.rect_original.x
                 self.player.rect_original.y=i.rect_original.y
+                self.player.position=[self.player.rect_original.x,self.player.rect_original.y]
                 break
 
         self.player.rect=self.player.rect_original.copy()
