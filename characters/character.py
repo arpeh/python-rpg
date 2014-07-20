@@ -259,7 +259,7 @@ class NPC(Character):
         self.text_index=len(self.speech_texts)-1 
 
         self.MAX_SPEED=1
-        self.frame_counter=0
+        self.frame_counter = random.randint(0, 200) #randomize NPC movement start time
 
     def update(self,level):
         '''The overloaded update method.
