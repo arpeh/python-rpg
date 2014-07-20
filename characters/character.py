@@ -36,8 +36,6 @@ class Character(pg.sprite.Sprite):
         self.animations={}        
         self.animation_counter=0
         self.velocity=[0,0]
-        self.moveX=0
-        self.moveY=0
         self.MAX_SPEED=2.0
 
         self.load_animations()
@@ -70,7 +68,7 @@ class Character(pg.sprite.Sprite):
         if self.animation_counter == 40: #TODO: generalize
             self.animation_counter = 0
         self.image=self.animations[self.current_animation[0]][self.current_animation[1]][(4*self.animation_counter)//40]
-        
+
         #Update the position
         self.rect.x += self.velocity[0]
         self.rect.y += self.velocity[1]         
@@ -81,47 +79,49 @@ class Character(pg.sprite.Sprite):
         #check for collisions
         collision_list = pg.sprite.spritecollide(self, level.obstacles, False)
         for i in collision_list:
-            # Stop moving the player when collision with the object
-            if self.velocity[0] > 0:
-                self.rect_original.x -= self.velocity[0]
-                self.velocity[0] = 0
-            elif self.velocity[0] < 0:
-                #The opposite
-                self.rect_original.x -= self.velocity[0]
-                self.velocity[0] = 0
-            # Same for y-direction
-            if self.velocity[1] > 0:
+            collision_position=self.rect_original.copy()
+
+            #test if moving the character back in the x-direction solves the collision. If so, stop the movement in the x-direction
+            self.rect_original.x -= self.velocity[0]
+            if not pg.Rect.colliderect(self.rect_original,i.rect_original):
+                self.velocity[0]=0
+            else:
+                #test the same in the y-direction
+                self.rect_original=collision_position.copy()
                 self.rect_original.y -= self.velocity[1]
-                self.velocity[1] = 0
-            elif self.velocity[1] < 0:
-                self.rect_original.y -= self.velocity[1]
-                self.velocity[1] = 0
-                
+                if not pg.Rect.colliderect(self.rect_original,i.rect_original):
+                    self.velocity[1]=0
+                else:
+                    #Otherwise move both
+                    self.rect_original=collision_position.copy()
+                    self.rect_original.x -= self.velocity[0]
+                    self.rect_original.y -= self.velocity[1]
+                    self.velocity=[0,0]
 
         collision_list = pg.sprite.spritecollide(self, level.character_list, False)
         for i in collision_list:
             if not i.name == self.name: 
-                # Stop moving the player when collision with the character
-                if self.velocity[0] > 0:
-                    self.rect_original.x -= self.velocity[0]
-                    self.velocity[0] = 0
-                elif self.velocity[0] < 0:
-                    #The opposite
-                    self.rect_original.x -= self.velocity[0]
-                    self.velocity[0] = 0
-                # Same for y-direction
-                if self.velocity[1] > 0:
+                collision_position=self.rect_original.copy()
+
+                self.rect_original.x -= self.velocity[0]
+                if not pg.Rect.colliderect(self.rect_original,i.rect_original):
+                    self.velocity[0]=0
+                else:
+                    self.rect_original=collision_position.copy()
                     self.rect_original.y -= self.velocity[1]
-		    self.velocity[1] = 0
-                elif self.velocity[1] < 0:
-                    self.rect_original.y -= self.velocity[1]
-		    self.velocity[1] = 0
+                    if not pg.Rect.colliderect(self.rect_original,i.rect_original):
+                        self.velocity[1]=0
+                    else:
+                        self.rect_original=collision_position.copy()
+                        self.rect_original.x -= self.velocity[0]
+                        self.rect_original.y -= self.velocity[1]
+                        self.velocity=[0,0]
 
         #Prevent the character going over the borders of the level
         if self.rect_original.x < 0:
             self.rect_original.x = 0
         elif self.rect_original.right > level.level_size[0]: #The right side limit has to be taken from screen size!
-                self.rect_original.right = level.level_size[0]             
+            self.rect_original.right = level.level_size[0]             
         if self.rect_original.y < 0:
             self.rect_original.y = 0
         elif self.rect_original.bottom > level.level_size[1]:
@@ -138,24 +138,37 @@ class Character(pg.sprite.Sprite):
         output: none
         '''
         #TODO: get rid of the constants
-        self.moveX = 0
-        self.moveY = 0
         self.current_animation[0]='stand' #default if no movement(s)
+
+        movement_direction=[0,0]
         for dir in movement_key_order:
-            if dir == "DOWN":
-                self.current_animation=["walk","front"]
-                self.moveY = self.MAX_SPEED
-            elif dir == "UP":
-                self.current_animation=["walk","back"]
-                self.moveY = -self.MAX_SPEED
             if dir == "LEFT":
                 self.current_animation=["walk","left"]
-                self.moveX = -self.MAX_SPEED
+                movement_direction[0] = -1 
             elif dir == "RIGHT":
                 self.current_animation=["walk","right"]
-                self.moveX = self.MAX_SPEED
-	self.velocity=[self.moveX, self.moveY] #apply direction to move
-            
+                movement_direction[0] = 1
+            if dir == "DOWN":
+                self.current_animation=["walk","front"]
+                movement_direction[1] = 1 
+            elif dir == "UP":
+                self.current_animation=["walk","back"]
+                movement_direction[1] = -1 
+
+        if movement_direction[0] and movement_direction[1]:
+            #If the character is moving diagonally, normalize the components with 1/sqrt(2)
+            #Doesn't function properly, because positions of sprites can't be altered by a fraction of a pixel.
+            #Maybe fixed in the future
+
+            #speed=0.7071*self.MAX_SPEED
+            #self.velocity=[movement_direction[0]*speed,movement_direction[1]*speed]
+
+            self.velocity=[movement_direction[0]*self.MAX_SPEED,movement_direction[1]*self.MAX_SPEED]            
+        else:
+            self.velocity=[movement_direction[0]*self.MAX_SPEED,movement_direction[1]*self.MAX_SPEED]
+
+
+
     def stop_moving(self):
         '''Stops the movement of the character.
         input: none
