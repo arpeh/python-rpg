@@ -282,16 +282,12 @@ class NPC(Character):
             # keep NPC in initial area
             if self.rect_original.x > self.start_x +self.npc_leash:
                 self.start_moving(['LEFT'])
-                print "npc x over"
             elif self.rect_original.x < self.start_x -self.npc_leash:
                 self.start_moving(['RIGHT'])
-                print "npc x under"
             elif self.rect_original.y > self.start_y +self.npc_leash:
                 self.start_moving(['UP'])
-                print "npc y over"
             elif self.rect_original.y < self.start_y -self.npc_leash:
                 self.start_moving(['DOWN'])
-                print "npc y under"
             else:
                 self.start_moving([ directions[random.randrange(len(directions))] ]) #need to be list
             self.frame_counter=0
